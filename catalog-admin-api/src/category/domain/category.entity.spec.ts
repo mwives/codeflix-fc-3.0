@@ -1,3 +1,4 @@
+import { Uuid } from '../../shared/domain/value-objects/uuid.vo'
 import { Category } from './category.entity'
 
 describe('CategoryEntity', () => {
@@ -7,7 +8,7 @@ describe('CategoryEntity', () => {
         name: 'any_category',
       })
 
-      expect(category.categoryId).toBeUndefined()
+      expect(category.categoryId).toBeInstanceOf(Uuid)
       expect(category.name).toBe('any_category')
       expect(category.description).toBeNull()
       expect(category.isActive).toBe(true)
@@ -17,14 +18,16 @@ describe('CategoryEntity', () => {
     it('should create instance with given values', () => {
       const now = new Date()
       const category = new Category({
-        categoryId: 'any_id',
+        categoryId: new Uuid('f47ac10b-58cc-4372-a567-0e02b2c3d479'),
         name: 'any_category',
         description: 'any_description',
         isActive: false,
         createdAt: now,
       })
 
-      expect(category.categoryId).toBe('any_id')
+      expect(category.categoryId.id).toBe(
+        'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+      )
       expect(category.name).toBe('any_category')
       expect(category.description).toBe('any_description')
       expect(category.isActive).toBe(false)
@@ -40,7 +43,7 @@ describe('CategoryEntity', () => {
         isActive: false,
       })
 
-      expect(category.categoryId).toBeUndefined()
+      expect(category.categoryId).toBeInstanceOf(Uuid)
       expect(category.name).toBe('any_category')
       expect(category.description).toBe('any_description')
       expect(category.isActive).toBe(false)
@@ -94,7 +97,6 @@ describe('CategoryEntity', () => {
     it('should return JSON', () => {
       const now = new Date()
       const category = new Category({
-        categoryId: 'any_id',
         name: 'any_category',
         description: 'any_description',
         isActive: false,
@@ -102,7 +104,7 @@ describe('CategoryEntity', () => {
       })
 
       expect(category.toJSON()).toEqual({
-        categoryId: 'any_id',
+        categoryId: expect.any(String),
         name: 'any_category',
         description: 'any_description',
         isActive: false,
