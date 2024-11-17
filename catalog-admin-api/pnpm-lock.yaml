@@ -27,12 +27,18 @@ importers:
       '@swc/jest':
         specifier: ^0.2.37
         version: 0.2.37(@swc/core@1.9.2)
+      '@types/chance':
+        specifier: ^1.1.6
+        version: 1.1.6
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
       '@types/lodash':
         specifier: ^4.17.13
         version: 4.17.13
+      chance:
+        specifier: ^1.1.12
+        version: 1.1.12
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.9.0)(ts-node@10.9.2(@swc/core@1.9.2)(@types/node@22.9.0)(typescript@5.6.3))
@@ -568,6 +574,9 @@ packages:
   '@types/cacheable-request@6.0.3':
     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
 
+  '@types/chance@1.1.6':
+    resolution: {integrity: sha512-V+pm3stv1Mvz8fSKJJod6CglNGVqEQ6OyuqitoDkWywEODM/eJd1eSuIp9xt6DrX8BWZ2eDSIzbw1tPCUTvGbQ==}
+
   '@types/graceful-fs@4.1.9':
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
 
@@ -735,6 +744,9 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
+
+  chance@1.1.12:
+    resolution: {integrity: sha512-vVBIGQVnwtUG+SYe0ge+3MvF78cvSpuCOEUJr7sVEk2vSBuMW6OXNJjSzdtzrlxNUEaoqH2GBd5Y/+18BEB01Q==}
 
   char-regex@1.0.2:
     resolution: {integrity: sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==}
@@ -2371,6 +2383,8 @@ snapshots:
       '@types/node': 22.9.0
       '@types/responselike': 1.0.3
 
+  '@types/chance@1.1.6': {}
+
   '@types/graceful-fs@4.1.9':
     dependencies:
       '@types/node': 22.9.0
@@ -2570,6 +2584,8 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  chance@1.1.12: {}
 
   char-regex@1.0.2: {}
 
