@@ -1,7 +1,7 @@
 import { SearchResult } from './search-result'
 
-describe('SearchResult Unit Tests', () => {
-  describe('constructor props', () => {
+describe('SearchResult', () => {
+  describe('constructor', () => {
     test('should initialize with correct properties', () => {
       let result = new SearchResult({
         items: ['entity1', 'entity2'] as any,
@@ -47,7 +47,7 @@ describe('SearchResult Unit Tests', () => {
       expect(result.lastPage).toBe(1)
     })
 
-    test('should calculate lastPage correctly when total is not a multiple of perPage', () => {
+    it('should calculate lastPage correctly when total is not a multiple of perPage', () => {
       const result = new SearchResult({
         items: [] as any,
         total: 101,
