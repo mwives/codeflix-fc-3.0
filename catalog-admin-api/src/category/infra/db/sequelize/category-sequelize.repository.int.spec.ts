@@ -1,28 +1,18 @@
-import { Sequelize } from 'sequelize-typescript'
-import { CategoryModel } from './category.model'
-import { CategorySequelizeRepository } from './category-sequelize.repository'
-import { Category } from '../../../domain/entity/category.entity'
-import { Uuid } from '../../../../shared/domain/value-object/value-objects/uuid.vo'
 import { NotFoundError } from '../../../../shared/domain/error/not-found.error'
+import { Uuid } from '../../../../shared/domain/value-object/value-objects/uuid.vo'
+import { setupSequelize } from '../../../../shared/infra/testing/helpers'
+import { Category } from '../../../domain/entity/category.entity'
 import { CategorySearchParams } from '../../../domain/repository/category.repository'
+import { CategorySequelizeRepository } from './category-sequelize.repository'
+import { CategoryModel } from './category.model'
 
 describe('CategorySequelizeRepository', () => {
-  let sequelize: Sequelize
   let repository: CategorySequelizeRepository
 
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: ':memory:',
-      models: [CategoryModel],
-      logging: false,
-    })
-    await sequelize.sync({ force: true })
-    repository = new CategorySequelizeRepository(CategoryModel)
-  })
+  setupSequelize({ models: [CategoryModel] })
 
-  afterEach(async () => {
-    await sequelize.close()
+  beforeEach(async () => {
+    repository = new CategorySequelizeRepository(CategoryModel)
   })
 
   async function createCategory(): Promise<Category> {

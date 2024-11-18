@@ -1,22 +1,9 @@
-import { DataType, Sequelize } from 'sequelize-typescript'
+import { DataType } from 'sequelize-typescript'
+import { setupSequelize } from '../../../../shared/infra/testing/helpers'
 import { CategoryModel } from './category.model'
 
 describe('CategoryModel', () => {
-  let sequelize: Sequelize
-
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: ':memory:',
-      models: [CategoryModel],
-      logging: false,
-    })
-    await sequelize.sync({ force: true })
-  })
-
-  afterEach(async () => {
-    await sequelize.close()
-  })
+  setupSequelize({ models: [CategoryModel] })
 
   describe('Model attributes mapping', () => {
     it('should correctly map the attributes of the CategoryModel', () => {

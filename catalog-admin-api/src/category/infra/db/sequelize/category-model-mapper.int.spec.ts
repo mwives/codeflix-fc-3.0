@@ -1,28 +1,14 @@
-import { Sequelize } from 'sequelize-typescript'
 import {
   InvalidUuidError,
   Uuid,
 } from '../../../../shared/domain/value-object/value-objects/uuid.vo'
+import { setupSequelize } from '../../../../shared/infra/testing/helpers'
 import { Category } from '../../../domain/entity/category.entity'
 import { CategoryModelMapper } from './category-model-mapper'
 import { CategoryModel } from './category.model'
 
 describe('CategoryModelMapper', () => {
-  let sequelize: Sequelize
-
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: ':memory:',
-      models: [CategoryModel],
-      logging: false,
-    })
-    await sequelize.sync({ force: true })
-  })
-
-  afterEach(async () => {
-    await sequelize.close()
-  })
+  setupSequelize({ models: [CategoryModel] })
 
   describe('toModel', () => {
     it('should return a CategoryModel instance', () => {
