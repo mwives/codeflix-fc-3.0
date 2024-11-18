@@ -1,6 +1,6 @@
-import { IUseCase } from '../../../shared/application/use-case.interface'
-import { Category } from '../../domain/entity/category.entity'
-import { ICategoryRepository } from '../../domain/repository/category.repository'
+import { IUseCase } from '../../../../shared/application/use-case.interface'
+import { Category } from '../../../domain/entity/category.entity'
+import { ICategoryRepository } from '../../../domain/repository/category.repository'
 
 export class CreateCategoryUseCase
   implements IUseCase<CreateCategoryInput, CreateCategoryOutput>

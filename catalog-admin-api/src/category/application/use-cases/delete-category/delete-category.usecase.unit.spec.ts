@@ -1,18 +1,15 @@
-import { NotFoundError } from '../../../shared/domain/error/not-found.error'
-import { setupSequelize } from '../../../shared/infra/testing/helpers'
-import { Category } from '../../domain/entity/category.entity'
-import { CategorySequelizeRepository } from '../../infra/db/sequelize/category-sequelize.repository'
-import { CategoryModel } from '../../infra/db/sequelize/category.model'
+import { NotFoundError } from '../../../../shared/domain/error/not-found.error'
+import { Category } from '../../../domain/entity/category.entity'
+import { CategoryInMemoryRepository } from '../../../infra/db/in-memory/category-in-memory.repository'
+import { UpdateCategoryUseCase } from '../update-category/update-category.usecase'
 import { DeleteCategoryUseCase } from './delete-category.usecase'
 
 describe('DeleteCategoryUseCase Unit Tests', () => {
-  setupSequelize({ models: [CategoryModel] })
-
   let useCase: DeleteCategoryUseCase
-  let repository: CategorySequelizeRepository
+  let repository: CategoryInMemoryRepository
 
   beforeEach(() => {
-    repository = new CategorySequelizeRepository(CategoryModel)
+    repository = new CategoryInMemoryRepository()
     useCase = new DeleteCategoryUseCase(repository)
   })
 

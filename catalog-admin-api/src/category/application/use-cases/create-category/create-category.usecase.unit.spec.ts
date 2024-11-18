@@ -1,6 +1,6 @@
-import { EntityValidationError } from '../../../shared/domain/validators/validation.error'
-import { Category } from '../../domain/entity/category.entity'
-import { CategoryInMemoryRepository } from '../../infra/db/in-memory/category-in-memory.repository'
+import { EntityValidationError } from '../../../../shared/domain/validators/validation.error'
+import { Category } from '../../../domain/entity/category.entity'
+import { CategoryInMemoryRepository } from '../../../infra/db/in-memory/category-in-memory.repository'
 import {
   CreateCategoryInput,
   CreateCategoryUseCase,

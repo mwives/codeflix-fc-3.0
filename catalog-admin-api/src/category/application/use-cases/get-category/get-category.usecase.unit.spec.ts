@@ -1,9 +1,10 @@
-import { NotFoundError } from '../../../shared/domain/error/not-found.error'
-import { Category } from '../../domain/entity/category.entity'
-import { CategoryInMemoryRepository } from '../../infra/db/in-memory/category-in-memory.repository'
+import { NotFoundError } from '../../../../shared/domain/error/not-found.error'
+import { InvalidUuidError } from '../../../../shared/domain/value-object/value-objects/uuid.vo'
+import { Category } from '../../../domain/entity/category.entity'
+import { CategoryInMemoryRepository } from '../../../infra/db/in-memory/category-in-memory.repository'
 import { GetCategoryInput, GetCategoryUseCase } from './get-category.usecase'
 
-describe('GetCategoryUseCase Integration Tests', () => {
+describe('GetCategoryUseCase Unit Tests', () => {
   let useCase: GetCategoryUseCase
   let repository: CategoryInMemoryRepository
 
@@ -13,6 +14,12 @@ describe('GetCategoryUseCase Integration Tests', () => {
   })
 
   describe('execute', () => {
+    it('should throw ValidationError when id is not a valid uuid', async () => {
+      const input: GetCategoryInput = { id: 'invalid_uuid' }
+
+      await expect(useCase.execute(input)).rejects.toThrow(InvalidUuidError)
+    })
+
     it('should throw NotFoundError when category does not exist', async () => {
       const input: GetCategoryInput = {
         id: '123e4567-e89b-12d3-a456-426614174000',
