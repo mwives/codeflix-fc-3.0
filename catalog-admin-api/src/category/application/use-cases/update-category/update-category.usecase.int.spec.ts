@@ -1,5 +1,4 @@
 import { NotFoundError } from '../../../../shared/domain/error/not-found.error'
-import { InvalidUuidError } from '../../../../shared/domain/value-object/value-objects/uuid.vo'
 import { Category } from '../../../domain/entity/category.entity'
 import { CategoryInMemoryRepository } from '../../../infra/db/in-memory/category-in-memory.repository'
 import {
