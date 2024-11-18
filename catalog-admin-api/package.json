@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage=false",
+    "test:cov": "jest --coverage=true",
+    "tsc:check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +16,6 @@
     "@swc/core": "^1.9.2",
     "@swc/jest": "^0.2.37",
     "@types/chance": "^1.1.6",
-    "@types/dotenv": "^8.2.3",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
     "@types/sequelize": "^4.28.20",
