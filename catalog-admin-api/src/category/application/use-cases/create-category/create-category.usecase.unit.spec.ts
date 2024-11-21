@@ -64,7 +64,7 @@ describe('CreateCategoryUseCase Unit Tests', () => {
 
     it('should throw an error if entity is invalid', async () => {
       const input: CreateCategoryInput = {
-        name: '',
+        name: 't'.repeat(256),
       }
 
       await expect(useCase.execute(input)).rejects.toThrow(

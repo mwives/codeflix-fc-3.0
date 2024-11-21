@@ -1,4 +1,5 @@
 import { NotFoundError } from '../../../../shared/domain/error/not-found.error'
+import { EntityValidationError } from '../../../../shared/domain/validators/validation.error'
 import { InvalidUuidError } from '../../../../shared/domain/value-object/value-objects/uuid.vo'
 import { Category } from '../../../domain/entity/category.entity'
 import { CategoryInMemoryRepository } from '../../../infra/db/in-memory/category-in-memory.repository'
@@ -26,6 +27,18 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
       const input = { id: '123e4567-e89b-12d3-a456-426614174000' }
       await expect(useCase.execute(input)).rejects.toThrow(
         new NotFoundError(input.id, Category)
+      )
+    })
+
+    it('should throw error if entity is invalid', async () => {
+      const category = Category.fake().aCategory().build()
+
+      await repository.insert(category)
+
+      const input = { id: category.categoryId.id, name: 't'.repeat(256) }
+
+      await expect(useCase.execute(input)).rejects.toThrow(
+        new EntityValidationError(['name'])
       )
     })
 

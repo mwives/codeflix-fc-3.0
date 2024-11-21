@@ -2,8 +2,6 @@ import { Uuid } from '../../../shared/domain/value-object/value-objects/uuid.vo'
 import { Category } from './category.entity'
 
 describe('CategoryEntity', () => {
-  let validateSpy: jest.SpyInstance
-
   const nameEmptyMessage = 'name should not be empty'
   const nameStringMessage = 'name must be a string'
   const nameMaxLengthMessage =
@@ -11,7 +9,9 @@ describe('CategoryEntity', () => {
   const descriptionStringMessage = 'description must be a string'
 
   beforeEach(() => {
-    validateSpy = jest.spyOn(Category, 'validate')
+    Category.prototype.validate = jest
+      .fn()
+      .mockImplementation(Category.prototype.validate)
   })
 
   describe('constructor', () => {
@@ -60,16 +60,17 @@ describe('CategoryEntity', () => {
       expect(category.description).toBe('any_description')
       expect(category.isActive).toBe(false)
       expect(category.createdAt).toBeInstanceOf(Date)
-      expect(validateSpy).toHaveBeenCalledTimes(1)
+      expect(category.validate).toHaveBeenCalledTimes(1)
+      expect(category.notification.hasErrors()).toBe(false)
     })
 
-    it('should throw validation errors for invalid values', () => {
-      expect(() =>
-        Category.create({ name: null, description: 1 as any })
-      ).toContainErrorMessages({
-        name: [nameEmptyMessage, nameStringMessage, nameMaxLengthMessage],
-        description: [descriptionStringMessage],
+    it('should have validation errors for invalid values', () => {
+      const category = Category.create({
+        name: 't'.repeat(256),
       })
+
+      expect(category.validate).toHaveBeenCalledTimes(1)
+      expect(category.notification.hasErrors()).toBe(true)
     })
   })
 
@@ -80,27 +81,15 @@ describe('CategoryEntity', () => {
       })
       category.changeName('new_category')
       expect(category.name).toBe('new_category')
-      expect(validateSpy).toHaveBeenCalledTimes(2)
+      expect(category.validate).toHaveBeenCalledTimes(2)
     })
 
-    it('should throw validation errors for invalid name', () => {
-      const assertions = [
-        {
-          name: null,
-          expected: [nameEmptyMessage, nameStringMessage, nameMaxLengthMessage],
-        },
-        { name: '', expected: [nameEmptyMessage] },
-        { name: 'a'.repeat(256), expected: [nameMaxLengthMessage] },
-        { name: 1 as any, expected: [nameStringMessage, nameMaxLengthMessage] },
-      ]
-
+    it('should have validation errors for invalid name', () => {
       const category = new Category({ name: 'any_category' })
 
-      assertions.forEach(({ name, expected }) => {
-        expect(() => category.changeName(name)).toContainErrorMessages({
-          name: expected,
-        })
-      })
+      category.changeName('t'.repeat(256))
+      expect(category.validate).toHaveBeenCalledTimes(1)
+      expect(category.notification.hasErrors()).toBe(true)
     })
   })
 
@@ -111,24 +100,7 @@ describe('CategoryEntity', () => {
       })
       category.changeDescription('new_description')
       expect(category.description).toBe('new_description')
-      expect(validateSpy).toHaveBeenCalledTimes(2)
-    })
-
-    it('should throw validation errors for invalid description', () => {
-      const assertions = [
-        { description: 1 as any, expected: [descriptionStringMessage] },
-        { description: 'a'.repeat(256), expected: [descriptionStringMessage] },
-      ]
-
-      const category = new Category({ name: 'any_category' })
-
-      assertions.forEach(({ description, expected }) => {
-        expect(() =>
-          category.changeDescription(description)
-        ).toContainErrorMessages({
-          description: expected,
-        })
-      })
+      expect(category.validate).toHaveBeenCalledTimes(1)
     })
   })
 

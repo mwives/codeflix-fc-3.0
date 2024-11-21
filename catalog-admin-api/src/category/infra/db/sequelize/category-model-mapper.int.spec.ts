@@ -1,3 +1,4 @@
+import { EntityValidationError } from '../../../../shared/domain/validators/validation.error'
 import {
   InvalidUuidError,
   Uuid,
@@ -66,6 +67,20 @@ describe('CategoryModelMapper', () => {
 
       expect(() => CategoryModelMapper.toEntity(categoryModel)).toThrow(
         InvalidUuidError
+      )
+    })
+
+    it('should throw an EntityValidationError if the entity is invalid', () => {
+      const categoryModel = CategoryModel.build({
+        categoryId: new Uuid().id,
+        name: 't'.repeat(256),
+        description: 'any_description',
+        isActive: true,
+        createdAt: new Date(),
+      })
+
+      expect(() => CategoryModelMapper.toEntity(categoryModel)).toThrow(
+        EntityValidationError
       )
     })
   })
