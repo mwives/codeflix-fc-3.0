@@ -6,6 +6,7 @@ import {
   CategoryOutput,
   CategoryOutputMapper,
 } from '../@shared/category-output'
+import { CreateCategoryInput } from './create-category.input'
 
 export class CreateCategoryUseCase
   implements IUseCase<CreateCategoryInput, CreateCategoryOutput>
@@ -22,12 +23,6 @@ export class CreateCategoryUseCase
     await this.categoryRepository.insert(category)
     return CategoryOutputMapper.toDTO(category)
   }
-}
-
-export type CreateCategoryInput = {
-  name: string
-  description?: string
-  isActive?: boolean
 }
 
 export type CreateCategoryOutput = CategoryOutput
