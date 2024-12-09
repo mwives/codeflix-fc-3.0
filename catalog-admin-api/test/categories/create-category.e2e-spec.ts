@@ -19,50 +19,87 @@ describe('CategoriesController (e2e)', () => {
   });
 
   describe('POST /categories', () => {
-    const arrange = CreateCategoryFixture.arrangeForCreate();
+    describe('create a category with valid input', () => {
+      const arrange = CreateCategoryFixture.arrangeForCreate();
 
-    test.each(arrange)(
-      'should create a category with $sendData',
-      async ({ sendData, expected }) => {
-        const res = await request(appHelper.app.getHttpServer())
-          .post('/categories')
-          .send(sendData)
-          .expect(201);
+      test.each(arrange)(
+        'should create a category when request body $sendData',
+        async ({ sendData, expected }) => {
+          const res = await request(appHelper.app.getHttpServer())
+            .post('/categories')
+            .send(sendData)
+            .expect(201);
 
-        expect(res.body).toHaveProperty('data');
+          expect(res.body).toHaveProperty('data');
 
-        // Validate response structure
-        const keysInResponse = CreateCategoryFixture.keysInResponse;
-        expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
+          // Validate response structure
+          const keysInResponse = CreateCategoryFixture.keysInResponse;
+          expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
 
-        // Verify persistence
-        const categoryCreated = await categoryRepository.findById(
-          new Uuid(res.body.data.id),
+          // Verify persistence
+          const categoryCreated = await categoryRepository.findById(
+            new Uuid(res.body.data.id),
+          );
+          expect(categoryCreated).not.toBeNull();
+
+          // Validate serialized response
+          const presenter = CategoriesController.serialize(
+            CategoryOutputMapper.toDTO(categoryCreated!),
+          );
+          const serialized = instanceToPlain(presenter);
+
+          expect(res.body.data).toStrictEqual({
+            id: serialized.id,
+            createdAt: serialized.createdAt,
+            ...expected,
+          });
+        },
+      );
+    });
+
+    describe('create a category with invalid input', () => {
+      describe('validation errors in request body:', () => {
+        const invalidRequest = CreateCategoryFixture.arrangeInvalidRequest();
+        const arrange = Object.keys(invalidRequest).map((key) => ({
+          label: key,
+          value: invalidRequest[key],
+        }));
+
+        test.each(arrange)(
+          'should return 422 when body is $label',
+          async ({ value }) => {
+            const res = await request(appHelper.app.getHttpServer())
+              .post('/categories')
+              .send(value)
+              .expect(422);
+
+            expect(res.body).toHaveProperty('message');
+            expect(res.body.error).toContain('Unprocessable Entity');
+          },
         );
-        expect(categoryCreated).not.toBeNull();
+      });
 
-        // Validate serialized response
-        const presenter = CategoriesController.serialize(
-          CategoryOutputMapper.toDTO(categoryCreated!),
+      describe('validation errors in domain rules', () => {
+        const invalidRequest =
+          CreateCategoryFixture.arrangeForEntityValidationError();
+        const arrange = Object.keys(invalidRequest).map((key) => ({
+          label: key,
+          value: invalidRequest[key],
+        }));
+
+        test.each(arrange)(
+          'should return 422 for domain validation error: $label',
+          async ({ value }) => {
+            const res = await request(appHelper.app.getHttpServer())
+              .post('/categories')
+              .send(value)
+              .expect(422);
+
+            expect(res.body).toHaveProperty('message');
+            expect(res.body.error).toContain('Unprocessable Entity');
+          },
         );
-        const serialized = instanceToPlain(presenter);
-
-        expect(res.body.data).toStrictEqual({
-          id: serialized.id,
-          createdAt: serialized.createdAt,
-          ...expected,
-        });
-      },
-    );
-
-    test('should return 422 for invalid input', async () => {
-      const res = await request(appHelper.app.getHttpServer())
-        .post('/categories')
-        .send({ invalidField: 'invalid' })
-        .expect(422);
-
-      expect(res.body).toHaveProperty('message');
-      expect(res.body.error).toContain('Unprocessable Entity');
+      });
     });
   });
 });
