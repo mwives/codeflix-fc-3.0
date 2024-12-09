@@ -1,7 +1,7 @@
 import { CategoryOutput } from '@core/category/application/use-cases/@shared/category-output';
 import { ListCategoriesOutput } from '@core/category/application/use-cases/list-categories/list-categories.usecase';
 import { Transform } from 'class-transformer';
-import { CollectionPresenter } from '../shared-module/collection.presenter';
+import { CollectionPresenter } from '../shared-module/presenters/collection.presenter';
 
 export class CategoryPresenter {
   id: string;
