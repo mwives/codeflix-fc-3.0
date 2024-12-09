@@ -77,7 +77,9 @@ export class CategoriesController {
 
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+  ) {
     return this.deleteCategoryUseCase.execute({ id });
   }
 
