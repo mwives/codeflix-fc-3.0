@@ -10,7 +10,7 @@ import { CategoryModel } from '@core/category/infra/db/sequelize/category.model'
 import { Provider } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 
-export const REPOSITORIES: { [key: string]: Provider } = {
+export const REPOSITORIES = {
   CATEGORY_REPOSITORY: {
     provide: 'CategoryRepository',
     useExisting: CategorySequelizeRepository,
@@ -27,7 +27,7 @@ export const REPOSITORIES: { [key: string]: Provider } = {
   },
 };
 
-export const USE_CASES: { [key: string]: Provider } = {
+export const USE_CASES = {
   CREATE_CATEGORY_USE_CASE: {
     provide: CreateCategoryUseCase,
     useFactory: (categoryRepository: ICategoryRepository) =>
