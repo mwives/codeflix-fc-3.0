@@ -19,6 +19,7 @@ export class CategoryModel extends Model<CategoryModelProps> {
     primaryKey: true,
     allowNull: false,
     unique: true,
+    field: 'category_id',
   })
   declare categoryId: string;
 
