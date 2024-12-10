@@ -6,6 +6,16 @@ const config: Config = {
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
   coverageProvider: 'v8',
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    'shared-module/testing',
+    'shared/testing',
+    '-fixture.ts',
+    '.d.ts',
+    '.input.ts',
+    '.interface.ts',
+    'validator-rules.ts',
+  ],
   coverageThreshold: {
     global: {
       branches: 80,
