@@ -14,13 +14,13 @@ describe('CategoriesController (e2e)', () => {
   describe('GET /categories/:id', () => {
     let categoryRepo: ICategoryRepository;
 
-    beforeAll(() => {
+    beforeEach(() => {
       categoryRepo = nestApp.app.get<ICategoryRepository>(
         CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
       );
     });
 
-    describe('Error scenarios', () => {
+    describe('when the category ID is invalid or not found', () => {
       const testCases = [
         {
           id: '88ff2587-ce5a-4769-a8c6-1d63d29c5f7a',
@@ -52,7 +52,7 @@ describe('CategoriesController (e2e)', () => {
       );
     });
 
-    describe('Success scenarios', () => {
+    describe('when the category ID is valid', () => {
       it('should return a category when ID is valid', async () => {
         const category = Category.fake().aCategory().build();
         await categoryRepo.insert(category);

@@ -12,7 +12,7 @@ describe('CategoriesController (e2e)', () => {
   const appHelper = startApp();
   let categoryRepository: ICategoryRepository;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     categoryRepository = appHelper.app.get<ICategoryRepository>(
       CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
     );

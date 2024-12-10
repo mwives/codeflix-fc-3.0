@@ -10,13 +10,13 @@ describe('CategoriesController (e2e)', () => {
   describe('DELETE /categories/:id', () => {
     let categoryRepo: ICategoryRepository;
 
-    beforeAll(() => {
+    beforeEach(() => {
       categoryRepo = appHelper.app.get<ICategoryRepository>(
         CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
       );
     });
 
-    describe('When the category ID is invalid or not found', () => {
+    describe('when the category ID is invalid or not found', () => {
       const cases = [
         {
           id: '88ff2587-ce5a-4769-a8c6-1d63d29c5f7a',
@@ -48,7 +48,7 @@ describe('CategoriesController (e2e)', () => {
       );
     });
 
-    describe('When the category ID is valid', () => {
+    describe('when the category ID is valid', () => {
       it('should delete the category and return status 204', async () => {
         const category = Category.fake().aCategory().build();
         await categoryRepo.insert(category);

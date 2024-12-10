@@ -7,7 +7,7 @@ import { applyGlobalConfig } from 'src/nest-modules/global-config';
 export function startApp() {
   let _app: INestApplication;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -21,7 +21,7 @@ export function startApp() {
     await _app.init();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await _app?.close();
   });
 
