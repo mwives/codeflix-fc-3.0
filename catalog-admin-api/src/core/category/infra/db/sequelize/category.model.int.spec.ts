@@ -19,7 +19,7 @@ describe('CategoryModel', () => {
       ]);
 
       expect(attributesMap.categoryId).toMatchObject({
-        field: 'categoryId',
+        field: 'category_id',
         fieldName: 'categoryId',
         primaryKey: true,
         type: DataType.UUID(),
