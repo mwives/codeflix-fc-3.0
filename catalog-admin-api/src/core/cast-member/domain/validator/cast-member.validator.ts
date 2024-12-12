@@ -28,5 +28,3 @@ export class CastMemberValidatorFactory {
     return new CastMemberValidator();
   }
 }
-
-export default CastMemberValidatorFactory;
