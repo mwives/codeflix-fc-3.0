@@ -2,12 +2,6 @@ import { Uuid } from '../../../shared/domain/value-object/value-objects/uuid.vo'
 import { Category } from './category.entity';
 
 describe('CategoryEntity', () => {
-  const nameEmptyMessage = 'name should not be empty';
-  const nameStringMessage = 'name must be a string';
-  const nameMaxLengthMessage =
-    'name must be shorter than or equal to 255 characters';
-  const descriptionStringMessage = 'description must be a string';
-
   beforeEach(() => {
     Category.prototype.validate = jest
       .fn()
