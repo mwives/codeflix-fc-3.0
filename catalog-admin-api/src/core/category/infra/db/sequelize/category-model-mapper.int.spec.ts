@@ -1,9 +1,9 @@
-import { EntityValidationError } from '../../../../shared/domain/validators/validation.error';
+import { LoadEntityError } from '@core/shared/domain/validators/validation.error';
 import {
   InvalidUuidError,
   Uuid,
-} from '../../../../shared/domain/value-object/value-objects/uuid.vo';
-import { setupSequelize } from '../../../../shared/infra/testing/helpers';
+} from '@core/shared/domain/value-object/value-objects/uuid.vo';
+import { setupSequelize } from '@core/shared/infra/testing/helpers';
 import { Category } from '../../../domain/entity/category.entity';
 import { CategoryModelMapper } from './category-model-mapper';
 import { CategoryModel } from './category.model';
@@ -70,7 +70,7 @@ describe('CategoryModelMapper', () => {
       );
     });
 
-    it('should throw an EntityValidationError if the entity is invalid', () => {
+    it('should throw an LoadEntityError if the entity is invalid', () => {
       const categoryModel = CategoryModel.build({
         categoryId: new Uuid().id,
         name: 't'.repeat(256),
@@ -80,7 +80,7 @@ describe('CategoryModelMapper', () => {
       });
 
       expect(() => CategoryModelMapper.toEntity(categoryModel)).toThrow(
-        EntityValidationError,
+        LoadEntityError,
       );
     });
   });
