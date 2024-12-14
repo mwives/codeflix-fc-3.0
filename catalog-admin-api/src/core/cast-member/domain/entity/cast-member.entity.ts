@@ -61,7 +61,7 @@ export class CastMember extends AggregateRoot {
     return this.castMemberId;
   }
 
-  toJSON(): Record<string, any> {
+  toJSON() {
     return {
       castMemberId: this.castMemberId.id,
       name: this.name,
