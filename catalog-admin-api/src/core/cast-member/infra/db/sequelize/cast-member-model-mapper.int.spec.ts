@@ -1,11 +1,9 @@
-import {
-  CastMemberType,
-  InvalidCastMemberTypeError,
-} from '@core/cast-member/domain/entity/cast-member-type.vo';
+import { CastMemberType } from '@core/cast-member/domain/entity/cast-member-type.vo';
 import {
   CastMember,
   CastMemberId,
 } from '@core/cast-member/domain/entity/cast-member.entity';
+import { LoadEntityError } from '@core/shared/domain/validators/validation.error';
 import { InvalidUuidError } from '@core/shared/domain/value-object/value-objects/uuid.vo';
 import { setupSequelize } from '@core/shared/infra/testing/helpers';
 import { CastMemberModelMapper } from './cast-member-model-mapper';
@@ -50,7 +48,7 @@ describe('CastMemberModelMapper', () => {
       expect(result).toMatchObject({
         castMemberId: new CastMemberId(castMemberModel.castMemberId),
         name: castMemberModel.name,
-        type: CastMemberType.create(castMemberModel.type),
+        type: CastMemberType.create(castMemberModel.type).ok,
         createdAt: castMemberModel.createdAt,
       });
     });
@@ -77,7 +75,7 @@ describe('CastMemberModelMapper', () => {
       });
 
       expect(() => CastMemberModelMapper.toEntity(castMemberModel)).toThrow(
-        InvalidCastMemberTypeError,
+        LoadEntityError,
       );
     });
   });

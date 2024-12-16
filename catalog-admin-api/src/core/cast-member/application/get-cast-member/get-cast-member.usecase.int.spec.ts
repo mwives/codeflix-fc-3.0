@@ -1,16 +1,10 @@
-import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
-import { GetCastMemberUseCase } from './get-cast-member.usecase';
-import {
-  CastMember,
-  CastMemberId,
-} from '@core/cast-member/domain/entity/cast-member.entity';
 import { CastMemberType } from '@core/cast-member/domain/entity/cast-member-type.vo';
-import { CastMemberOutputMapper } from '../@shared/cast-member-output';
-import { InvalidUuidError } from '@core/shared/domain/value-object/value-objects/uuid.vo';
-import { NotFoundError } from '@core/shared/domain/error/not-found.error';
+import { CastMember } from '@core/cast-member/domain/entity/cast-member.entity';
 import { CastMemberSequelizeRepository } from '@core/cast-member/infra/db/sequelize/cast-member-sequelize.repository';
-import { setupSequelize } from '@core/shared/infra/testing/helpers';
 import { CastMemberModel } from '@core/cast-member/infra/db/sequelize/cast-member.model';
+import { setupSequelize } from '@core/shared/infra/testing/helpers';
+import { CastMemberOutputMapper } from '../@shared/cast-member-output';
+import { GetCastMemberUseCase } from './get-cast-member.usecase';
 
 describe('GetCastMember Integration Tests', () => {
   setupSequelize({ models: [CastMemberModel] });

@@ -8,15 +8,16 @@ describe('CastMemberType', () => {
   describe('create', () => {
     it('should create a valid CastMemberType', () => {
       const type = CastMemberTypes.ACTOR;
-      const castMemberType = CastMemberType.create(type);
+      const [castMemberType, error] = CastMemberType.create(type);
+      expect(error).toBeNull();
       expect(castMemberType).toBeInstanceOf(CastMemberType);
     });
 
     it('should throw an error if the type is invalid', () => {
       const type = 3;
-      expect(() => CastMemberType.create(type as CastMemberTypes)).toThrow(
-        InvalidCastMemberTypeError,
-      );
+      const [castMemberType, error] = CastMemberType.create(type as any);
+      expect(castMemberType).toBeNull();
+      expect(error).toBeInstanceOf(InvalidCastMemberTypeError);
     });
   });
 

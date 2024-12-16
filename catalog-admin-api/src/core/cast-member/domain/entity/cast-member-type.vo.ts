@@ -1,3 +1,4 @@
+import { Either } from '@core/shared/domain/either';
 import { ValueObject } from '@core/shared/domain/value-object/value-object';
 
 export enum CastMemberTypes {
@@ -21,15 +22,15 @@ export class CastMemberType extends ValueObject {
   }
 
   static create(value: CastMemberTypes) {
-    return new CastMemberType(value);
+    return Either.safe(() => new CastMemberType(value));
   }
 
   static createAnActor() {
-    return CastMemberType.create(CastMemberTypes.ACTOR);
+    return CastMemberType.create(CastMemberTypes.ACTOR).ok;
   }
 
   static createADirector() {
-    return CastMemberType.create(CastMemberTypes.DIRECTOR);
+    return CastMemberType.create(CastMemberTypes.DIRECTOR).ok;
   }
 }
 

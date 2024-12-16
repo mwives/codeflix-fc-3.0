@@ -3,7 +3,7 @@ import {
   CastMember,
   CastMemberId,
 } from '@core/cast-member/domain/entity/cast-member.entity';
-import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
+import { LoadEntityError } from '@core/shared/domain/validators/validation.error';
 import { CastMemberModel } from './cast-member.model';
 
 export class CastMemberModelMapper {
@@ -17,17 +17,24 @@ export class CastMemberModelMapper {
   }
 
   static toEntity(model: CastMemberModel) {
+    const { castMemberId, ...castMemberData } = model.toJSON();
+    const [type, castMemberTypeError] = CastMemberType.create(
+      castMemberData.type,
+    ).asArray();
+
     const castMember = new CastMember({
+      ...castMemberData,
       castMemberId: new CastMemberId(model.castMemberId),
-      name: model.name,
-      type: CastMemberType.create(model.type),
-      createdAt: model.createdAt,
+      type,
     });
 
-    castMember.validate();
+    const notification = castMember.notification;
+    if (castMemberTypeError) {
+      notification.setError(castMemberTypeError.message, 'type');
+    }
 
-    if (castMember.notification.hasErrors()) {
-      throw new EntityValidationError(castMember.notification.toJSON());
+    if (notification.hasErrors()) {
+      throw new LoadEntityError(notification.toJSON());
     }
 
     return castMember;

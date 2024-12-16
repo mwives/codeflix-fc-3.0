@@ -1,3 +1,4 @@
+import { Either } from '@core/shared/domain/either';
 import { ISearchableRepository } from '@core/shared/domain/repository/repository.interface';
 import {
   SearchParams as DefaultSearchParams,
@@ -5,7 +6,11 @@ import {
 } from '@core/shared/domain/repository/search-params';
 import { SearchResult as DefaultSearchResult } from '@core/shared/domain/repository/search-result';
 import { SearchValidationError } from '@core/shared/domain/validators/validation.error';
-import { CastMemberType, CastMemberTypes } from '../entity/cast-member-type.vo';
+import {
+  CastMemberType,
+  CastMemberTypes,
+  InvalidCastMemberTypeError,
+} from '../entity/cast-member-type.vo';
 import { CastMember, CastMemberId } from '../entity/cast-member.entity';
 
 export type CastMemberFilter = {
@@ -28,21 +33,27 @@ export class CastMemberSearchParams extends DefaultSearchParams<CastMemberFilter
       };
     } = {},
   ) {
-    try {
-      const type = props.filter?.type
-        ? CastMemberType.create(props.filter?.type)
-        : null;
-      return new CastMemberSearchParams({
-        ...props,
-        filter: {
-          name: props.filter?.name,
-          type,
-        },
-      });
-    } catch (err) {
-      const error = new SearchValidationError([{ type: [err.message] }]);
+    const [type, errorCastMemberType] = Either.of(props.filter?.type)
+      .map((type) => type || null)
+      .chain<CastMemberType | null, InvalidCastMemberTypeError>((type) =>
+        type ? CastMemberType.create(type) : Either.of(null),
+      )
+      .asArray();
+
+    if (errorCastMemberType) {
+      const error = new SearchValidationError([
+        { type: [errorCastMemberType.message] },
+      ]);
       throw error;
     }
+
+    return new CastMemberSearchParams({
+      ...props,
+      filter: {
+        name: props.filter?.name,
+        type: type,
+      },
+    });
   }
 
   get filter(): CastMemberFilter | null {

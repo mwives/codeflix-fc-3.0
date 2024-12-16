@@ -76,12 +76,7 @@ describe('CastMemberSequelizeRepository', () => {
 
       const result = await repository.findById(castMember.castMemberId);
 
-      expect(result).toMatchObject({
-        castMemberId: castMember.castMemberId,
-        name: castMember.name,
-        type: castMember.type,
-        createdAt: castMember.createdAt,
-      });
+      expect(result.toJSON()).toMatchObject(castMember.toJSON());
     });
 
     it('should return null if the cast member does not exist', async () => {

@@ -11,6 +11,7 @@ import {
   CastMemberOutputMapper,
 } from '../@shared/cast-member-output';
 import { UpdateCastMemberInput } from './update-cast-member.input';
+import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 
 export class UpdateCastMemberUseCase
   implements IUseCase<UpdateCastMemberInput, UpdateCastMemberOutput>
@@ -30,8 +31,18 @@ export class UpdateCastMemberUseCase
     }
 
     if (input.type) {
-      const type = CastMemberType.create(input.type);
+      const [type, errorCastMemberType] = CastMemberType.create(
+        input.type,
+      ).asArray();
+
       castMember.changeType(type);
+
+      errorCastMemberType &&
+        castMember.notification.setError(errorCastMemberType.message, 'type');
+    }
+
+    if (castMember.notification.hasErrors()) {
+      throw new EntityValidationError(castMember.notification.toJSON());
     }
 
     await this.castMemberRepository.update(castMember);

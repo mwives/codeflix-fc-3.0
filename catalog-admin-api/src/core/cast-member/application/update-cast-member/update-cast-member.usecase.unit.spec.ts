@@ -1,13 +1,11 @@
-import {
-  CastMemberType,
-  InvalidCastMemberTypeError,
-} from '@core/cast-member/domain/entity/cast-member-type.vo';
+import { CastMemberType } from '@core/cast-member/domain/entity/cast-member-type.vo';
 import {
   CastMember,
   CastMemberId,
 } from '@core/cast-member/domain/entity/cast-member.entity';
 import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { NotFoundError } from '@core/shared/domain/error/not-found.error';
+import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 import { InvalidUuidError } from '@core/shared/domain/value-object/value-objects/uuid.vo';
 import { CastMemberOutputMapper } from '../@shared/cast-member-output';
 import { UpdateCastMemberUseCase } from './update-cast-member.usecase';
@@ -81,7 +79,7 @@ describe('UpdateCastMemberUsecase', () => {
       };
 
       await expect(useCase.execute(input)).rejects.toThrow(
-        InvalidCastMemberTypeError,
+        EntityValidationError,
       );
     });
   });

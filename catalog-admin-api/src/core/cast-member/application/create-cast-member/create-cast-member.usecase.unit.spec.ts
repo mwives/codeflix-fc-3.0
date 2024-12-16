@@ -1,5 +1,5 @@
-import { InvalidCastMemberTypeError } from '@core/cast-member/domain/entity/cast-member-type.vo';
 import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
+import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 import { CreateCastMemberInput } from './create-cast-member.input';
 import { CreateCastMemberUseCase } from './create-cast-member.usecase';
 
@@ -36,8 +36,6 @@ describe('CreateCastMemberUseCase Unit Tests', () => {
       type: 3 as any,
     };
 
-    await expect(useCase.execute(input)).rejects.toThrow(
-      InvalidCastMemberTypeError,
-    );
+    await expect(useCase.execute(input)).rejects.toThrow(EntityValidationError);
   });
 });
