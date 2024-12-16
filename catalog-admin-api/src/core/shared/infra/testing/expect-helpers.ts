@@ -1,7 +1,7 @@
 import { Notification } from '../../domain/validators/notification';
 
 expect.extend({
-  toContainErrorMessages(
+  toContainNotificationErrorMessages(
     expected: Notification,
     received: Array<string | { [key: string]: string[] }>,
   ) {
