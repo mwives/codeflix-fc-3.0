@@ -69,7 +69,7 @@ export class GenreFakeBuilder<TBuild = any> {
   build(): TBuild {
     const Genres = new Array(this.countObjs).fill(undefined).map((_, index) => {
       const categoryId = new CategoryId();
-      const categoriesId = this._categoryIds.length
+      const categoryIds = this._categoryIds.length
         ? this.callFactory(this._categoryIds, index)
         : [categoryId];
 
@@ -78,7 +78,7 @@ export class GenreFakeBuilder<TBuild = any> {
           ? undefined
           : this.callFactory(this._genreId, index),
         name: this.callFactory(this._name, index),
-        categoryIds: new Map(categoriesId.map((id) => [id.id, id])),
+        categoryIds: new Map(categoryIds.map((id) => [id.id, id])),
         isActive: this.callFactory(this._isActive, index),
         ...(this._createdAt && {
           createdAt: this.callFactory(this._createdAt, index),
