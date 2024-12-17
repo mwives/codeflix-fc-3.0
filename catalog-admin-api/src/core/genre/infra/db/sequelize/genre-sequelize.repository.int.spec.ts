@@ -545,6 +545,36 @@ describe('GenreSequelizeRepository Integration Tests', () => {
       expect(searchOutput.items).toHaveLength(15);
     });
 
+    it('should filter by name when search params are provided', async () => {
+      const categories = Category.fake().theCategories(3).build();
+      await categoryRepository.bulkInsert(categories);
+
+      const genres = Genre.fake()
+        .theGenres(16)
+        .addCategoryId(categories[0].categoryId)
+        .addCategoryId(categories[1].categoryId)
+        .addCategoryId(categories[2].categoryId)
+        .build();
+      await genreRepository.bulkInsert(genres);
+
+      const searchOutput = await genreRepository.search(
+        GenreSearchParams.create({
+          filter: {
+            name: genres[0].name,
+          },
+        }),
+      );
+
+      expect(searchOutput).toBeInstanceOf(GenreSearchResult);
+      expect(searchOutput.toJSON()).toMatchObject({
+        total: 1,
+        currentPage: 1,
+        lastPage: 1,
+        perPage: 15,
+      });
+      expect(searchOutput.items).toHaveLength(1);
+    });
+
     describe('with transaction', () => {
       it('should return genres with transaction', async () => {
         const categories = Category.fake().theCategories(3).build();
