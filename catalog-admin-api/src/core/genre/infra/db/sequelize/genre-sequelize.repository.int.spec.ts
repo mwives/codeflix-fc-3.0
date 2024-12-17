@@ -6,23 +6,25 @@ import {
   GenreSearchParams,
   GenreSearchResult,
 } from '@core/genre/domain/repository/genre.repository';
+import { InvalidArgumentError } from '@core/shared/domain/error/invalid-argument.error';
 import { NotFoundError } from '@core/shared/domain/error/not-found.error';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { setupSequelize } from '@core/shared/infra/testing/helpers';
-import { GenreModelMapper } from './genre-model-mapper';
 import { GenreSequelizeRepository } from './genre-sequelize.repository';
 import { GenreCategoryModel, GenreModel } from './genre.model';
-import { InvalidArgumentError } from '@core/shared/domain/error/invalid-argument.error';
 
 describe('GenreSequelizeRepository Integration Tests', () => {
-  setupSequelize({
+  const sequelizeHelper = setupSequelize({
     models: [GenreModel, GenreCategoryModel, CategoryModel],
   });
 
+  let uow: UnitOfWorkSequelize;
   let genreRepository: GenreSequelizeRepository;
   let categoryRepository: CategorySequelizeRepository;
 
   beforeEach(async () => {
-    genreRepository = new GenreSequelizeRepository(GenreModel);
+    uow = new UnitOfWorkSequelize(sequelizeHelper.sequelize);
+    genreRepository = new GenreSequelizeRepository(GenreModel, uow);
     categoryRepository = new CategorySequelizeRepository(CategoryModel);
   });
 
@@ -40,6 +42,43 @@ describe('GenreSequelizeRepository Integration Tests', () => {
       const genreFound = await genreRepository.findById(genre.genreId);
 
       expect(genreFound.toJSON()).toEqual(genre.toJSON());
+    });
+
+    describe('with transaction', () => {
+      it('should insert a genre with transaction', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genre = Genre.fake()
+          .aGenre()
+          .addCategoryId(category.categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.insert(genre);
+        await uow.commit();
+
+        const genreFound = await genreRepository.findById(genre.genreId);
+        expect(genreFound.genreId).toBeValueObject(genre.genreId);
+      });
+
+      it('should rollback if an error occurs', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genre = Genre.fake()
+          .aGenre()
+          .addCategoryId(category.categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.insert(genre);
+        await uow.rollback();
+
+        await expect(
+          genreRepository.findById(genre.genreId),
+        ).resolves.toBeNull();
+      });
     });
   });
 
@@ -68,6 +107,56 @@ describe('GenreSequelizeRepository Integration Tests', () => {
         ]),
       });
     });
+
+    describe('with transaction', () => {
+      it('should insert multiple genres with transaction', async () => {
+        const categories = Category.fake().theCategories(3).build();
+        await categoryRepository.bulkInsert(categories);
+
+        const genres = Genre.fake()
+          .theGenres(2)
+          .addCategoryId(categories[0].categoryId)
+          .addCategoryId(categories[1].categoryId)
+          .addCategoryId(categories[2].categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.bulkInsert(genres);
+        await uow.commit();
+
+        const genresFound = await genreRepository.findAll();
+
+        expect(genresFound).toHaveLength(genres.length);
+        expect(genresFound[0].toJSON()).toEqual({
+          ...genres[0].toJSON(),
+          categoryIds: expect.arrayContaining([
+            categories[0].categoryId.id,
+            categories[1].categoryId.id,
+            categories[2].categoryId.id,
+          ]),
+        });
+      });
+
+      it('should rollback if an error occurs', async () => {
+        const categories = Category.fake().theCategories(3).build();
+        await categoryRepository.bulkInsert(categories);
+
+        const genres = Genre.fake()
+          .theGenres(2)
+          .addCategoryId(categories[0].categoryId)
+          .addCategoryId(categories[1].categoryId)
+          .addCategoryId(categories[2].categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.bulkInsert(genres);
+        await uow.rollback();
+
+        const genresFound = await genreRepository.findAll();
+
+        expect(genresFound).toHaveLength(0);
+      });
+    });
   });
 
   describe('findById', () => {
@@ -84,6 +173,26 @@ describe('GenreSequelizeRepository Integration Tests', () => {
       const genreFound = await genreRepository.findById(genre.genreId);
 
       expect(genreFound.toJSON()).toEqual(genre.toJSON());
+    });
+
+    describe('with transaction', () => {
+      it('should find a genre by id with transaction', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genre = Genre.fake()
+          .aGenre()
+          .addCategoryId(category.categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.insert(genre);
+
+        const genreFound = await genreRepository.findById(genre.genreId);
+        expect(genreFound.genreId).toBeValueObject(genre.genreId);
+
+        await uow.commit();
+      });
     });
   });
 
@@ -110,6 +219,35 @@ describe('GenreSequelizeRepository Integration Tests', () => {
         ]),
       });
     });
+
+    describe('with transaction', () => {
+      it('should find all genres with transaction', async () => {
+        const categories = Category.fake().theCategories(3).build();
+        await categoryRepository.bulkInsert(categories);
+
+        const genres = Genre.fake()
+          .theGenres(2)
+          .addCategoryId(categories[0].categoryId)
+          .addCategoryId(categories[1].categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.bulkInsert(genres);
+
+        const genresFound = await genreRepository.findAll();
+
+        expect(genresFound).toHaveLength(genres.length);
+        expect(genresFound[0].toJSON()).toEqual({
+          ...genres[0].toJSON(),
+          categoryIds: expect.arrayContaining([
+            categories[0].categoryId.id,
+            categories[1].categoryId.id,
+          ]),
+        });
+
+        await uow.commit();
+      });
+    });
   });
 
   describe('findByIds', () => {
@@ -129,6 +267,28 @@ describe('GenreSequelizeRepository Integration Tests', () => {
       );
 
       expect(genresFound).toHaveLength(genres.length);
+    });
+
+    describe('with transaction', () => {
+      it('should find genres by ids with transaction', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genres = Genre.fake()
+          .theGenres(2)
+          .addCategoryId(category.categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.bulkInsert(genres);
+
+        const genresFound = await genreRepository.findByIds(
+          genres.map((g) => g.genreId),
+        );
+        expect(genresFound).toHaveLength(genres.length);
+
+        await uow.commit();
+      });
     });
   });
 
@@ -158,6 +318,32 @@ describe('GenreSequelizeRepository Integration Tests', () => {
       await expect(genreRepository.existsById([])).rejects.toThrow(
         InvalidArgumentError,
       );
+    });
+
+    describe('with transaction', () => {
+      it('should return exists and not exists genres with transaction', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genres = Genre.fake()
+          .theGenres(2)
+          .addCategoryId(category.categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.bulkInsert(genres);
+
+        const genreIds = genres.map((g) => g.genreId);
+        const genreIdsCopy = [...genreIds];
+        genreIdsCopy.push(new GenreId());
+
+        const result = await genreRepository.existsById(genreIdsCopy);
+
+        expect(result.existing).toHaveLength(genreIds.length);
+        expect(result.notExisting).toHaveLength(1);
+
+        await uow.commit();
+      });
     });
   });
 
@@ -189,6 +375,53 @@ describe('GenreSequelizeRepository Integration Tests', () => {
         NotFoundError,
       );
     });
+
+    describe('with transaction', () => {
+      it('should update a genre with transaction', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genre = Genre.fake()
+          .aGenre()
+          .addCategoryId(category.categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.insert(genre);
+
+        genre.changeName('new name');
+
+        await genreRepository.update(genre);
+        await uow.commit();
+
+        const genreFound = await genreRepository.findById(genre.genreId);
+
+        expect(genreFound.toJSON()).toEqual(genre.toJSON());
+        expect(genreFound.name).toBe('new name');
+      });
+
+      it('should rollback if an error occurs', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genre = Genre.fake()
+          .aGenre()
+          .addCategoryId(category.categoryId)
+          .build();
+
+        await genreRepository.insert(genre);
+
+        genre.changeName('new name');
+
+        await uow.start();
+        await genreRepository.update(genre);
+        await uow.rollback();
+
+        const genreFound = await genreRepository.findById(genre.genreId);
+
+        expect(genreFound.name).not.toBe('new name');
+      });
+    });
   });
 
   describe('delete', () => {
@@ -214,6 +447,44 @@ describe('GenreSequelizeRepository Integration Tests', () => {
       await expect(genreRepository.delete(genreId)).rejects.toThrow(
         NotFoundError,
       );
+    });
+
+    describe('with transaction', () => {
+      it('should delete a genre with transaction', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genre = Genre.fake()
+          .aGenre()
+          .addCategoryId(category.categoryId)
+          .build();
+        await genreRepository.insert(genre);
+
+        uow.start();
+        await genreRepository.delete(genre.genreId);
+        await uow.commit();
+
+        const genreFound = await genreRepository.findById(genre.genreId);
+        expect(genreFound).toBeNull();
+      });
+
+      it('should rollback if an error occurs', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepository.insert(category);
+
+        const genre = Genre.fake()
+          .aGenre()
+          .addCategoryId(category.categoryId)
+          .build();
+        await genreRepository.insert(genre);
+
+        await uow.start();
+        await genreRepository.delete(genre.genreId);
+        await uow.rollback();
+
+        const genreFound = await genreRepository.findById(genre.genreId);
+        expect(genreFound).not.toBeNull();
+      });
     });
   });
 
@@ -272,6 +543,38 @@ describe('GenreSequelizeRepository Integration Tests', () => {
         perPage: 15,
       });
       expect(searchOutput.items).toHaveLength(15);
+    });
+
+    describe('with transaction', () => {
+      it('should return genres with transaction', async () => {
+        const categories = Category.fake().theCategories(3).build();
+        await categoryRepository.bulkInsert(categories);
+
+        const genres = Genre.fake()
+          .theGenres(16)
+          .addCategoryId(categories[0].categoryId)
+          .addCategoryId(categories[1].categoryId)
+          .addCategoryId(categories[2].categoryId)
+          .build();
+
+        uow.start();
+        await genreRepository.bulkInsert(genres);
+
+        const searchOutput = await genreRepository.search(
+          GenreSearchParams.create(),
+        );
+
+        expect(searchOutput).toBeInstanceOf(GenreSearchResult);
+        expect(searchOutput.toJSON()).toMatchObject({
+          total: 16,
+          currentPage: 1,
+          lastPage: 2,
+          perPage: 15,
+        });
+        expect(searchOutput.items).toHaveLength(15);
+
+        await uow.commit();
+      });
     });
   });
 });
