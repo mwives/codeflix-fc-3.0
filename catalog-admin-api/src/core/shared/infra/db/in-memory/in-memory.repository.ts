@@ -1,3 +1,4 @@
+import { InvalidArgumentError } from '@core/shared/domain/error/invalid-argument.error';
 import { Entity } from '../../../domain/entity/entity';
 import { NotFoundError } from '../../../domain/error/not-found.error';
 import {
@@ -55,6 +56,40 @@ export abstract class InMemoryRepository<
 
   async findAll(): Promise<E[]> {
     return this.items;
+  }
+
+  async findByIds(ids: ID[]): Promise<E[]> {
+    return this.items.filter((entity) => {
+      return ids.some((id) => entity.entityId.equals(id));
+    });
+  }
+
+  async existsById(ids: ID[]): Promise<{ existent: ID[]; nonExistent: ID[] }> {
+    if (!ids.length) {
+      throw new InvalidArgumentError(
+        'ids must be an array with at least one element',
+      );
+    }
+
+    if (this.items.length === 0) {
+      return {
+        existent: [],
+        nonExistent: ids,
+      };
+    }
+
+    const existsId = new Set<ID>();
+    const notExistsId = new Set<ID>();
+
+    ids.forEach((id) => {
+      const item = this.items.find((entity) => entity.entityId.equals(id));
+      item ? existsId.add(id) : notExistsId.add(id);
+    });
+
+    return {
+      existent: Array.from(existsId.values()),
+      nonExistent: Array.from(notExistsId.values()),
+    };
   }
 
   abstract getEntity(): new (...args: any[]) => E;

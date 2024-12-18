@@ -1,7 +1,8 @@
+import { InvalidArgumentError } from '@core/shared/domain/error/invalid-argument.error';
+import { SortDirection } from '@core/shared/domain/repository/search-params';
 import { literal, Op } from 'sequelize';
 import { NotFoundError } from '../../../../shared/domain/error/not-found.error';
-import { Uuid } from '../../../../shared/domain/value-object/value-objects/uuid.vo';
-import { Category } from '../../../domain/entity/category.entity';
+import { Category, CategoryId } from '../../../domain/entity/category.entity';
 import {
   CategorySearchParams,
   CategorySearchResult,
@@ -9,7 +10,6 @@ import {
 } from '../../../domain/repository/category.repository';
 import { CategoryModelMapper } from './category-model-mapper';
 import { CategoryModel } from './category.model';
-import { SortDirection } from '@core/shared/domain/repository/search-params';
 
 export class CategorySequelizeRepository implements ICategoryRepository {
   sortableFields: string[] = ['name', 'created_at'];
@@ -47,7 +47,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     });
   }
 
-  async delete(id: Uuid): Promise<void> {
+  async delete(id: CategoryId): Promise<void> {
     const category = await this._get(id.id);
 
     if (!category) {
@@ -57,9 +57,20 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     await this.categoryModel.destroy({ where: { categoryId: id.id } });
   }
 
-  async findById(id: Uuid): Promise<Category | null> {
+  async findById(id: CategoryId): Promise<Category | null> {
     const category = await this._get(id.id);
     return category ? CategoryModelMapper.toEntity(category) : null;
+  }
+
+  async findByIds(ids: CategoryId[]): Promise<Category[]> {
+    const models = await this.categoryModel.findAll({
+      where: {
+        categoryId: {
+          [Op.in]: ids.map((id) => id.id),
+        },
+      },
+    });
+    return models.map((m) => CategoryModelMapper.toEntity(m));
   }
 
   private async _get(id: string) {
@@ -69,6 +80,37 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   async findAll(): Promise<Category[]> {
     const categories = await this.categoryModel.findAll();
     return categories.map((category) => CategoryModelMapper.toEntity(category));
+  }
+
+  async existsById(
+    ids: CategoryId[],
+  ): Promise<{ existent: CategoryId[]; nonExistent: CategoryId[] }> {
+    if (!ids.length) {
+      throw new InvalidArgumentError(
+        'ids must be an array with at least one element',
+      );
+    }
+
+    const existsCategoryModels = await this.categoryModel.findAll({
+      attributes: ['category_id'],
+      where: {
+        categoryId: {
+          [Op.in]: ids.map((id) => id.id),
+        },
+      },
+    });
+
+    const existsCategoryIds = existsCategoryModels.map(
+      (m) => new CategoryId(m.categoryId),
+    );
+    const notExistsCategoryIds = ids.filter(
+      (id) => !existsCategoryIds.some((e) => e.equals(id)),
+    );
+
+    return {
+      existent: existsCategoryIds,
+      nonExistent: notExistsCategoryIds,
+    };
   }
 
   async search({
