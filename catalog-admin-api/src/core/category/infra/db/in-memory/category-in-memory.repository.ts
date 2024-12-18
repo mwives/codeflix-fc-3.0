@@ -1,11 +1,13 @@
-import { Category } from '@core/category/domain/entity/category.entity';
+import {
+  Category,
+  CategoryId,
+} from '@core/category/domain/entity/category.entity';
 import { ICategoryRepository } from '@core/category/domain/repository/category.repository';
 import { SortDirection } from '@core/shared/domain/repository/search-params';
-import { Uuid } from '@core/shared/domain/value-object/value-objects/uuid.vo';
 import { InMemorySearchableRepository } from '@core/shared/infra/db/in-memory/in-memory.repository';
 
 export class CategoryInMemoryRepository
-  extends InMemorySearchableRepository<Category, Uuid>
+  extends InMemorySearchableRepository<Category, CategoryId>
   implements ICategoryRepository
 {
   sortableFields: string[] = ['name', 'created_at'];
