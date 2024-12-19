@@ -68,7 +68,7 @@ export class GenreSequelizeRepository implements IGenreRepository {
 
   async existsById(
     ids: GenreId[],
-  ): Promise<{ existing: GenreId[]; notExisting: GenreId[] }> {
+  ): Promise<{ existent: GenreId[]; nonExistent: GenreId[] }> {
     if (!ids.length) {
       throw new InvalidArgumentError(
         'ids must be an array with at least one element',
@@ -89,8 +89,8 @@ export class GenreSequelizeRepository implements IGenreRepository {
       (id) => !existsGenreIds.some((e) => e.equals(id)),
     );
     return {
-      existing: existsGenreIds,
-      notExisting: notExistsGenreIds,
+      existent: existsGenreIds,
+      nonExistent: notExistsGenreIds,
     };
   }
 

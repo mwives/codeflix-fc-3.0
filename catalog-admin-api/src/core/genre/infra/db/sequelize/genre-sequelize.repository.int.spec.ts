@@ -310,8 +310,8 @@ describe('GenreSequelizeRepository Integration Tests', () => {
 
       const result = await genreRepository.existsById(genreIdsCopy);
 
-      expect(result.existing).toHaveLength(genreIds.length);
-      expect(result.notExisting).toHaveLength(1);
+      expect(result.existent).toHaveLength(genreIds.length);
+      expect(result.nonExistent).toHaveLength(1);
     });
 
     it('should throw an error if ids is an empty array', async () => {
@@ -339,8 +339,8 @@ describe('GenreSequelizeRepository Integration Tests', () => {
 
         const result = await genreRepository.existsById(genreIdsCopy);
 
-        expect(result.existing).toHaveLength(genreIds.length);
-        expect(result.notExisting).toHaveLength(1);
+        expect(result.existent).toHaveLength(genreIds.length);
+        expect(result.nonExistent).toHaveLength(1);
 
         await uow.commit();
       });
