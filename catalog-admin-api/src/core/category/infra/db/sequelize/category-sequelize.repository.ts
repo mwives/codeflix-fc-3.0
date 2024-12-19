@@ -15,7 +15,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   sortableFields: string[] = ['name', 'created_at'];
   orderBy = {
     mysql: {
-      name: (sort_dir: SortDirection) => literal(`binary name ${sort_dir}`), //ascii
+      name: (sortDir: SortDirection) => literal(`binary name ${sortDir}`), //ascii
     },
   };
 
@@ -92,7 +92,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     }
 
     const existsCategoryModels = await this.categoryModel.findAll({
-      attributes: ['category_id'],
+      attributes: ['categoryId'],
       where: {
         categoryId: {
           [Op.in]: ids.map((id) => id.id),
@@ -143,12 +143,12 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     });
   }
 
-  private formatSort(sort: string, sort_dir: SortDirection) {
+  private formatSort(sort: string, sortDir: SortDirection) {
     const dialect = this.categoryModel.sequelize!.getDialect() as 'mysql';
     if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
-      return this.orderBy[dialect][sort](sort_dir);
+      return this.orderBy[dialect][sort](sortDir);
     }
-    return [[sort, sort_dir]];
+    return [[sort, sortDir]];
   }
 
   getEntity(): new (...args: any[]) => Category {
