@@ -3,6 +3,7 @@ import { CastMembersModule } from './nest-modules/cast-members/cast-members.modu
 import { CategoriesModule } from './nest-modules/categories-module/categories.module';
 import { ConfigModule } from './nest-modules/config-module/config.module';
 import { DatabaseModule } from './nest-modules/database-module/database.module';
+import { GenresModule } from './nest-modules/genres-module/genres.module';
 import { SharedModule } from './nest-modules/shared-module/shared.module';
 
 @Module({
@@ -11,6 +12,7 @@ import { SharedModule } from './nest-modules/shared-module/shared.module';
     DatabaseModule,
     CastMembersModule,
     CategoriesModule,
+    GenresModule,
     SharedModule,
   ],
 })
