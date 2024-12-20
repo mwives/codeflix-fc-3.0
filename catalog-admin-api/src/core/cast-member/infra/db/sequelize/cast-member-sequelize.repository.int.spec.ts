@@ -126,7 +126,7 @@ describe('CastMemberSequelizeRepository', () => {
   });
 
   describe('existsById', () => {
-    it('should return existing cast members', async () => {
+    it('should return existent cast members', async () => {
       const castMembers = [
         CastMember.fake().aDirector().build(),
         CastMember.fake().anActor().build(),
@@ -137,11 +137,11 @@ describe('CastMemberSequelizeRepository', () => {
         castMembers.map((c) => c.castMemberId),
       );
 
-      expect(result.exists).toHaveLength(2);
-      expect(result.notExists).toHaveLength(0);
+      expect(result.existent).toHaveLength(2);
+      expect(result.nonExistent).toHaveLength(0);
     });
 
-    it('should return not existing cast members', async () => {
+    it('should return nonExistent cast members', async () => {
       const castMembers = [
         CastMember.fake().aDirector().build(),
         CastMember.fake().anActor().build(),
@@ -151,8 +151,8 @@ describe('CastMemberSequelizeRepository', () => {
         castMembers.map((c) => c.castMemberId),
       );
 
-      expect(result.exists).toHaveLength(0);
-      expect(result.notExists).toHaveLength(2);
+      expect(result.existent).toHaveLength(0);
+      expect(result.nonExistent).toHaveLength(2);
     });
 
     it('should throw InvalidArgumentError if ids is an empty array', async () => {
