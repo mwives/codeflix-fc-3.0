@@ -1,11 +1,13 @@
 import { CategoryModel } from '@core/category/infra/db/sequelize/category.model';
-import { Module } from '@nestjs/common';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { Global, Module, Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { getConnectionToken, SequelizeModule } from '@nestjs/sequelize';
 import { CONFIG_SCHEMA_TYPE } from 'src/nest-modules/config-module/config.module';
 
 const models = [CategoryModel];
 
+@Global()
 @Module({
   imports: [
     SequelizeModule.forRootAsync({
@@ -41,5 +43,19 @@ const models = [CategoryModel];
       inject: [ConfigService],
     }),
   ],
+  providers: [
+    {
+      provide: UnitOfWorkSequelize,
+      inject: [getConnectionToken()],
+      useFactory: (sequelize) => new UnitOfWorkSequelize(sequelize),
+      scope: Scope.REQUEST,
+    },
+    {
+      provide: 'UnitOfWork',
+      useExisting: UnitOfWorkSequelize,
+      scope: Scope.REQUEST,
+    },
+  ],
+  exports: ['UnitOfWork'],
 })
 export class DatabaseModule {}
