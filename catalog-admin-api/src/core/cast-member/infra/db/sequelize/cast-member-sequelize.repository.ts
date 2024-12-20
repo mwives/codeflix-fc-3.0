@@ -54,7 +54,7 @@ export class CastMemberSequelizeRepository implements ICastMemberRepository {
 
   async existsById(
     ids: CastMemberId[],
-  ): Promise<{ exists: CastMemberId[]; notExists: CastMemberId[] }> {
+  ): Promise<{ existent: CastMemberId[]; nonExistent: CastMemberId[] }> {
     if (!ids.length) {
       throw new InvalidArgumentError(
         'ids must be an array with at least one element',
@@ -76,8 +76,8 @@ export class CastMemberSequelizeRepository implements ICastMemberRepository {
       (id) => !existsCastMemberIds.some((e) => e.equals(id)),
     );
     return {
-      exists: existsCastMemberIds,
-      notExists: notExistsCastMemberIds,
+      existent: existsCastMemberIds,
+      nonExistent: notExistsCastMemberIds,
     };
   }
 
