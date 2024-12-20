@@ -179,12 +179,12 @@ export class GenreSequelizeRepository implements IGenreRepository {
           value: props.filter.categoryIds.map((c) => c.id),
           get condition() {
             return {
-              ['$categoryIds.categoryId$']: {
+              ['$categoryIds.category_id$']: {
                 [Op.in]: this.value,
               },
             };
           },
-          rawCondition: `${genreCategoryTableName}.categoryId IN (:categoryIds)`,
+          rawCondition: `${genreCategoryTableName}.category_id IN (:category_ids)`,
         });
       }
     }
