@@ -228,8 +228,6 @@ export class GenreSequelizeRepository implements IGenreRepository {
       },
     );
 
-    console.log(idsResult);
-
     const models = await this.genreModel.findAll({
       where: {
         genreId: {

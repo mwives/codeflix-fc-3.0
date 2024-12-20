@@ -43,7 +43,6 @@ export class CreateGenreUseCase
     }
 
     if (notification.hasErrors()) {
-      console.log(notification.toJSON());
       throw new EntityValidationError(notification.toJSON());
     }
 

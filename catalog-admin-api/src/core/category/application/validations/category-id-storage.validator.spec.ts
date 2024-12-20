@@ -29,8 +29,6 @@ describe('CategoryIdStorageValidator', () => {
         category2.categoryId.id,
       ]);
 
-      console.log([category1, category2]);
-
       expect(existByIdSpy).toHaveBeenCalledWith([
         category1.categoryId,
         category2.categoryId,
