@@ -3,11 +3,11 @@ import { DeleteCategoryUseCase } from '@core/category/application/use-cases/dele
 import { GetCategoryUseCase } from '@core/category/application/use-cases/get-category/get-category.usecase';
 import { ListCategoriesUseCase } from '@core/category/application/use-cases/list-categories/list-categories.usecase';
 import { UpdateCategoryUseCase } from '@core/category/application/use-cases/update-category/update-category.usecase';
+import { CategoryIdStorageValidator } from '@core/category/application/validations/category-id-storage.validator';
 import { ICategoryRepository } from '@core/category/domain/repository/category.repository';
 import { CategoryInMemoryRepository } from '@core/category/infra/db/in-memory/category-in-memory.repository';
 import { CategorySequelizeRepository } from '@core/category/infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '@core/category/infra/db/sequelize/category.model';
-import { Provider } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 
 export const REPOSITORIES = {
@@ -60,7 +60,18 @@ export const USE_CASES = {
   },
 };
 
+export const VALIDATIONS = {
+  CATEGORIES_IDS_EXISTS_IN_DATABASE_VALIDATOR: {
+    provide: CategoryIdStorageValidator,
+    useFactory: (categoryRepo: ICategoryRepository) => {
+      return new CategoryIdStorageValidator(categoryRepo);
+    },
+    inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
+  },
+};
+
 export const CATEGORY_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
+  VALIDATIONS,
 };
