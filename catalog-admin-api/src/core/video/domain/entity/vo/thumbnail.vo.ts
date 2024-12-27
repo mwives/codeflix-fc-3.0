@@ -1,11 +1,11 @@
 import { Either } from '@core/shared/domain/either';
 import {
-  MediaFileValidator,
-  InvalidMediaFileSizeError,
   InvalidMediaFileMimeTypeError,
+  InvalidMediaFileSizeError,
+  MediaFileValidator,
 } from '@core/shared/domain/validators/media-file.validator';
 import { ImageMedia } from '@core/shared/domain/value-object/value-objects/image-media.vo';
-import { VideoId } from './video.entity';
+import { VideoId } from '../video.entity';
 
 export class Thumbnail extends ImageMedia {
   static maxSize = 1024 * 1024 * 2;
