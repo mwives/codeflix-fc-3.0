@@ -5,7 +5,7 @@ import {
   CastMemberId,
 } from '@core/cast-member/domain/entity/cast-member.entity';
 import { CastMemberType } from '@core/cast-member/domain/entity/cast-member-type.vo';
-import { CastMemberOutputMapper } from '../@shared/cast-member-output';
+import { CastMemberOutputMapper } from '../common/cast-member-output';
 import { InvalidUuidError } from '@core/shared/domain/value-object/value-objects/uuid.vo';
 import { NotFoundError } from '@core/shared/domain/error/not-found.error';
 

@@ -11,7 +11,7 @@ import { IUseCase } from '@core/shared/application/use-case.interface';
 import {
   CastMemberOutput,
   CastMemberOutputMapper,
-} from '../@shared/cast-member-output';
+} from '../common/cast-member-output';
 import { ListCastMembersInput } from './list-cast-members.input';
 
 export class ListCastMembersUseCase

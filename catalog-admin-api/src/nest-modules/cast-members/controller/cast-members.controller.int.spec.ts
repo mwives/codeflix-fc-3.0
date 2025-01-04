@@ -1,9 +1,9 @@
-import { CastMemberOutputMapper } from '@core/cast-member/application/@shared/cast-member-output';
-import { CreateCastMemberUseCase } from '@core/cast-member/application/create-cast-member/create-cast-member.usecase';
-import { DeleteCastMemberUseCase } from '@core/cast-member/application/delete-cast-member/delete-cast-member.usecase';
-import { GetCastMemberUseCase } from '@core/cast-member/application/get-cast-member/get-cast-member.usecase';
-import { ListCastMembersUseCase } from '@core/cast-member/application/list-cast-members/list-cast-members.usecase';
-import { UpdateCastMemberUseCase } from '@core/cast-member/application/update-cast-member/update-cast-member.usecase';
+import { CastMemberOutputMapper } from '@core/cast-member/application/usecases/common/cast-member-output';
+import { CreateCastMemberUseCase } from '@core/cast-member/application/usecases/create-cast-member/create-cast-member.usecase';
+import { DeleteCastMemberUseCase } from '@core/cast-member/application/usecases/delete-cast-member/delete-cast-member.usecase';
+import { GetCastMemberUseCase } from '@core/cast-member/application/usecases/get-cast-member/get-cast-member.usecase';
+import { ListCastMembersUseCase } from '@core/cast-member/application/usecases/list-cast-members/list-cast-members.usecase';
+import { UpdateCastMemberUseCase } from '@core/cast-member/application/usecases/update-cast-member/update-cast-member.usecase';
 import { CastMember } from '@core/cast-member/domain/entity/cast-member.entity';
 import { ICastMemberRepository } from '@core/cast-member/domain/repository/cast-member.repository';
 import { Uuid } from '@core/shared/domain/value-object/value-objects/uuid.vo';

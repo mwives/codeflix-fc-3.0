@@ -7,7 +7,7 @@ import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memo
 import { NotFoundError } from '@core/shared/domain/error/not-found.error';
 import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 import { InvalidUuidError } from '@core/shared/domain/value-object/value-objects/uuid.vo';
-import { CastMemberOutputMapper } from '../@shared/cast-member-output';
+import { CastMemberOutputMapper } from '../common/cast-member-output';
 import { UpdateCastMemberUseCase } from './update-cast-member.usecase';
 
 describe('UpdateCastMemberUsecase', () => {

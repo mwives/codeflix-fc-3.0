@@ -1,5 +1,5 @@
-import { CastMemberOutput } from '@core/cast-member/application/@shared/cast-member-output';
-import { ListCastMembersOutput } from '@core/cast-member/application/list-cast-members/list-cast-members.usecase';
+import { CastMemberOutput } from '@core/cast-member/application/usecases/common/cast-member-output';
+import { ListCastMembersOutput } from '@core/cast-member/application/usecases/list-cast-members/list-cast-members.usecase';
 import { CastMemberTypes } from '@core/cast-member/domain/entity/cast-member-type.vo';
 import { Transform } from 'class-transformer';
 import { CollectionPresenter } from '../shared-module/presenters/collection.presenter';

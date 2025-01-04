@@ -1,4 +1,4 @@
-import { CastMemberOutputMapper } from '@core/cast-member/application/@shared/cast-member-output';
+import { CastMemberOutputMapper } from '@core/cast-member/application/usecases/common/cast-member-output';
 import { CastMember } from '@core/cast-member/domain/entity/cast-member.entity';
 import { ICastMemberRepository } from '@core/cast-member/domain/repository/cast-member.repository';
 import { Uuid } from '@core/shared/domain/value-object/value-objects/uuid.vo';

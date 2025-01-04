@@ -9,7 +9,7 @@ import { NotFoundError } from '@core/shared/domain/error/not-found.error';
 import {
   CastMemberOutput,
   CastMemberOutputMapper,
-} from '../@shared/cast-member-output';
+} from '../common/cast-member-output';
 import { UpdateCastMemberInput } from './update-cast-member.input';
 import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 

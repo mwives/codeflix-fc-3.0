@@ -1,16 +1,16 @@
-import { CreateCastMemberOutput } from '@core/cast-member/application/create-cast-member/create-cast-member.usecase';
-import { GetCastMemberOutput } from '@core/cast-member/application/get-cast-member/get-cast-member.usecase';
-import { ListCastMembersOutput } from '@core/cast-member/application/list-cast-members/list-cast-members.usecase';
-import { UpdateCastMemberOutput } from '@core/cast-member/application/update-cast-member/update-cast-member.usecase';
+import { CreateCastMemberOutput } from '@core/cast-member/application/usecases/create-cast-member/create-cast-member.usecase';
+import { GetCastMemberOutput } from '@core/cast-member/application/usecases/get-cast-member/get-cast-member.usecase';
+import { ListCastMembersOutput } from '@core/cast-member/application/usecases/list-cast-members/list-cast-members.usecase';
+import { UpdateCastMemberOutput } from '@core/cast-member/application/usecases/update-cast-member/update-cast-member.usecase';
 import { CastMemberTypes } from '@core/cast-member/domain/entity/cast-member-type.vo';
 import { SortDirection } from '@core/shared/domain/repository/search-params';
-import { CastMembersController } from './cast-members.controller';
 import {
   CastMemberCollectionPresenter,
   CastMemberPresenter,
 } from '../cast-members.presenter';
 import { CreateCastMemberDto } from '../dto/create-cast-member.dto';
 import { UpdateCastMemberDto } from '../dto/update-cast-member.dto';
+import { CastMembersController } from './cast-members.controller';
 
 describe('CastMembersController Unit Tests', () => {
   let controller: CastMembersController;

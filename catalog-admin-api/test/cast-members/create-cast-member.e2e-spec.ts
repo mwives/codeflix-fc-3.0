@@ -1,4 +1,4 @@
-import { CastMemberOutputMapper } from '@core/cast-member/application/@shared/cast-member-output';
+import { CastMemberOutputMapper } from '@core/cast-member/application/usecases/common/cast-member-output';
 import { CastMemberId } from '@core/cast-member/domain/entity/cast-member.entity';
 import { ICastMemberRepository } from '@core/cast-member/domain/repository/cast-member.repository';
 import { instanceToPlain } from 'class-transformer';

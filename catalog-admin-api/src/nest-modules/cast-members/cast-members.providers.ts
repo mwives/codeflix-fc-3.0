@@ -1,8 +1,8 @@
-import { CreateCastMemberUseCase } from '@core/cast-member/application/create-cast-member/create-cast-member.usecase';
-import { DeleteCastMemberUseCase } from '@core/cast-member/application/delete-cast-member/delete-cast-member.usecase';
-import { GetCastMemberUseCase } from '@core/cast-member/application/get-cast-member/get-cast-member.usecase';
-import { ListCastMembersUseCase } from '@core/cast-member/application/list-cast-members/list-cast-members.usecase';
-import { UpdateCastMemberUseCase } from '@core/cast-member/application/update-cast-member/update-cast-member.usecase';
+import { CreateCastMemberUseCase } from '@core/cast-member/application/usecases/create-cast-member/create-cast-member.usecase';
+import { DeleteCastMemberUseCase } from '@core/cast-member/application/usecases/delete-cast-member/delete-cast-member.usecase';
+import { GetCastMemberUseCase } from '@core/cast-member/application/usecases/get-cast-member/get-cast-member.usecase';
+import { ListCastMembersUseCase } from '@core/cast-member/application/usecases/list-cast-members/list-cast-members.usecase';
+import { UpdateCastMemberUseCase } from '@core/cast-member/application/usecases/update-cast-member/update-cast-member.usecase';
 import { ICastMemberRepository } from '@core/cast-member/domain/repository/cast-member.repository';
 import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { CastMemberSequelizeRepository } from '@core/cast-member/infra/db/sequelize/cast-member-sequelize.repository';

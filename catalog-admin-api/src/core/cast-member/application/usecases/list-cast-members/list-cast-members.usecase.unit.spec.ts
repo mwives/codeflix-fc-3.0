@@ -1,7 +1,7 @@
 import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { ListCastMembersUseCase } from './list-cast-members.usecase';
 import { CastMember } from '@core/cast-member/domain/entity/cast-member.entity';
-import { CastMemberOutputMapper } from '../@shared/cast-member-output';
+import { CastMemberOutputMapper } from '../common/cast-member-output';
 
 describe('ListCastMembersUseCase Unit Tests', () => {
   let useCase: ListCastMembersUseCase;

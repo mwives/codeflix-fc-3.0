@@ -8,7 +8,7 @@ import { NotFoundError } from '@core/shared/domain/error/not-found.error';
 import {
   CastMemberOutput,
   CastMemberOutputMapper,
-} from '../@shared/cast-member-output';
+} from '../common/cast-member-output';
 
 export class GetCastMemberUseCase
   implements IUseCase<GetCastMemberInput, GetCastMemberOutput>

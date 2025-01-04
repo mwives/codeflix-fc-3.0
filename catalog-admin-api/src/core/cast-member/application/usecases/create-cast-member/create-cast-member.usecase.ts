@@ -6,7 +6,7 @@ import { EntityValidationError } from '@core/shared/domain/validators/validation
 import {
   CastMemberOutput,
   CastMemberOutputMapper,
-} from '../@shared/cast-member-output';
+} from '../common/cast-member-output';
 import { CreateCastMemberInput } from './create-cast-member.input';
 
 export type CreateCastMemberOutput = CastMemberOutput;
