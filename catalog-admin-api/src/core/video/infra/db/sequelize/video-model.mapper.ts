@@ -55,8 +55,6 @@ export class VideoModelMapper {
       );
     }
 
-    console.log('imageMedias', imageMedias);
-
     const bannerModel = imageMedias.find(
       (i) => i.videoImageMediaType === 'banner',
     );
@@ -196,6 +194,7 @@ export class VideoModelMapper {
                   index === 0
                     ? AudioVideoMediaType.TRAILER
                     : AudioVideoMediaType.VIDEO,
+                mediaType: index === 0 ? 'trailer' : 'video',
               } as any)
             : null;
         })
