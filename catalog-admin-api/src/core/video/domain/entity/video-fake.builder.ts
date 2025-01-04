@@ -348,7 +348,7 @@ export class VideoFakeBuilder<TBuild = any> {
     const video = this.getValue('video');
     return (
       video ??
-      Trailer.create({
+      VideoMedia.create({
         name: 'test-name-video.mp4',
         rawLocation: 'test path video',
       })
