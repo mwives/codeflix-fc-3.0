@@ -73,4 +73,13 @@ export class VideoMedia extends AudioVideoMedia {
       status: AudioVideoMediaStatus.FAILED,
     });
   }
+
+  toJSON() {
+    return {
+      name: this.name,
+      rawLocation: this.rawLocation,
+      encodedLocation: this.encodedLocation,
+      status: this.status,
+    };
+  }
 }
