@@ -1,5 +1,4 @@
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import { CategoryModel } from '../../../category/infra/db/sequelize/category.model';
 import { Config } from '../config';
 
 export function setupSequelize(options: SequelizeOptions = {}) {
