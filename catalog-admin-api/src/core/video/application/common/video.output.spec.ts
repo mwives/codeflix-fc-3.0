@@ -2,7 +2,7 @@ import { CastMember } from '@core/cast-member/domain/entity/cast-member.entity';
 import { Category } from '@core/category/domain/entity/category.entity';
 import { Genre } from '@core/genre/domain/entity/genre.entity';
 import { Video } from '@core/video/domain/entity/video.entity';
-import { VideoOutputMapper } from './video-output';
+import { VideoOutputMapper } from './video.output';
 
 describe('VideoOutputMapper', () => {
   describe('toOutput', () => {
