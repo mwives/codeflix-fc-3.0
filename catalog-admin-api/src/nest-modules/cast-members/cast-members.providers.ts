@@ -3,6 +3,7 @@ import { DeleteCastMemberUseCase } from '@core/cast-member/application/usecases/
 import { GetCastMemberUseCase } from '@core/cast-member/application/usecases/get-cast-member/get-cast-member.usecase';
 import { ListCastMembersUseCase } from '@core/cast-member/application/usecases/list-cast-members/list-cast-members.usecase';
 import { UpdateCastMemberUseCase } from '@core/cast-member/application/usecases/update-cast-member/update-cast-member.usecase';
+import { CastMembersStorageValidator } from '@core/cast-member/application/validations/cast-member-storage.validator';
 import { ICastMemberRepository } from '@core/cast-member/domain/repository/cast-member.repository';
 import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { CastMemberSequelizeRepository } from '@core/cast-member/infra/db/sequelize/cast-member-sequelize.repository';
@@ -65,7 +66,18 @@ export const USE_CASES = {
   },
 };
 
+export const VALIDATIONS = {
+  CAST_MEMBERS_STORAGE_VALIDATOR: {
+    provide: CastMembersStorageValidator,
+    useFactory: (castMemberRepo: ICastMemberRepository) => {
+      return new CastMembersStorageValidator(castMemberRepo);
+    },
+    inject: [REPOSITORIES.CAST_MEMBER_REPOSITORY.provide],
+  },
+};
+
 export const CAST_MEMBERS_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
+  VALIDATIONS,
 };

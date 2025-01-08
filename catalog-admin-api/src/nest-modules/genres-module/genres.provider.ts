@@ -13,6 +13,7 @@ import { IUnitOfWork } from '@core/shared/domain/repository/unit-of-work.interfa
 import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { getModelToken } from '@nestjs/sequelize';
 import { CATEGORY_PROVIDERS } from '../categories-module/categories.providers';
+import { GenresIdStorageValidator } from '@core/genre/application/validations/genre-id-storage.validator';
 
 export const REPOSITORIES = {
   GENRE_REPOSITORY: {
@@ -114,7 +115,18 @@ export const USE_CASES = {
   },
 };
 
+export const VALIDATIONS = {
+  GENRES_ID_STORAGE_VALIDATOR: {
+    provide: GenresIdStorageValidator,
+    useFactory: (genreRepo: IGenreRepository) => {
+      return new GenresIdStorageValidator(genreRepo);
+    },
+    inject: [REPOSITORIES.GENRE_REPOSITORY.provide],
+  },
+};
+
 export const GENRES_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
+  VALIDATIONS,
 };
