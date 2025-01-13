@@ -15,6 +15,7 @@ const config: Config = {
     '.input.ts',
     '.interface.ts',
     'validator-rules.ts',
+    'sequelize/migrations',
   ],
   coverageThreshold: {
     global: {
