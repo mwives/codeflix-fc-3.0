@@ -1,4 +1,7 @@
-import { IDomainEvent } from '@core/shared/domain/events/domain-event.interface';
+import {
+  IDomainEvent,
+  IIntegrationEvent,
+} from '@core/shared/domain/events/domain-event.interface';
 import { VideoId } from '../entity/video.entity';
 import { Trailer } from '../entity/vo/trailer.vo';
 import { VideoMedia } from '../entity/vo/video-media.vo';
@@ -24,5 +27,28 @@ export class VideoAudioMediaReplaced implements IDomainEvent {
     this.mediaType = props.mediaType;
     this.occurrenceDate = new Date();
     this.eventVersion = 1;
+  }
+
+  getIntegrationEvent(): VideoAudioMediaUploadedIntegrationEvent {
+    return new VideoAudioMediaUploadedIntegrationEvent(this);
+  }
+}
+
+export class VideoAudioMediaUploadedIntegrationEvent
+  implements IIntegrationEvent
+{
+  eventName: string;
+  payload: any;
+  eventVersion: number;
+  occurrenceDate: Date;
+
+  constructor(event: VideoAudioMediaReplaced) {
+    this.eventVersion = event.eventVersion;
+    this.occurrenceDate = event.occurrenceDate;
+    this.payload = {
+      video_id: event.entityId.id,
+      media: event.media.toJSON(),
+    };
+    this.eventName = this.constructor.name;
   }
 }
