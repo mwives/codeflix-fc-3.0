@@ -1,7 +1,8 @@
 import { DomainEventMediator } from '@core/shared/domain/events/domain-event-mediator';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 
+@Global()
 @Module({
   imports: [EventEmitterModule.forRoot()],
   providers: [

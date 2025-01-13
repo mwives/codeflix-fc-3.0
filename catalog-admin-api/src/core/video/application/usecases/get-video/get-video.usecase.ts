@@ -5,7 +5,7 @@ import { IUseCase } from '@core/shared/application/use-case.interface';
 import { NotFoundError } from '@core/shared/domain/error/not-found.error';
 import { Video, VideoId } from '@core/video/domain/entity/video.entity';
 import { IVideoRepository } from '@core/video/domain/repository/video.repository';
-import { VideoOutputMapper } from '../common/video.output';
+import { VideoOutput, VideoOutputMapper } from '../common/video.output';
 
 export class GetVideoUseCase
   implements IUseCase<GetVideoInput, GetVideoOutput>
