@@ -5,9 +5,11 @@ import { ICategoryRepository } from '@core/category/domain/repository/category.r
 import { GenresIdStorageValidator } from '@core/genre/application/validations/genre-id-storage.validator';
 import { IGenreRepository } from '@core/genre/domain/repository/genre.repository';
 import { ApplicationService } from '@core/shared/application/application.service';
+import { IMessageBroker } from '@core/shared/application/message-broker.interface';
 import { IStorage } from '@core/shared/application/storage.interface';
 import { IUnitOfWork } from '@core/shared/domain/repository/unit-of-work.interface';
 import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { PublishVideoMediaReplacedInQueueHandler } from '@core/video/application/handlers/publish-video-media-replaced-in-queue.handler';
 import { CreateVideoUseCase } from '@core/video/application/usecases/create-video/create-video.usecase';
 import { GetVideoUseCase } from '@core/video/application/usecases/get-video/get-video.usecase';
 import { ProcessAudioVideoMediasUseCase } from '@core/video/application/usecases/process-audio-video-medias/process-audio-video-medias.usecase';
@@ -139,7 +141,18 @@ export const USE_CASES = {
   },
 };
 
+export const HANDLERS = {
+  PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
+    provide: PublishVideoMediaReplacedInQueueHandler,
+    useFactory: (messageBroker: IMessageBroker) => {
+      return new PublishVideoMediaReplacedInQueueHandler(messageBroker);
+    },
+    inject: ['IMessageBroker'],
+  },
+};
+
 export const VIDEOS_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
+  HANDLERS,
 };
