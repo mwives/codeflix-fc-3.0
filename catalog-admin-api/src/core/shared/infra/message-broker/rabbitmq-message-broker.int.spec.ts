@@ -8,6 +8,8 @@ import { RabbitMQMessageBroker } from './rabbitmq-message-broker';
 class TestEvent implements IDomainEvent {
   occurrenceDate: Date = new Date();
   eventVersion: number = 1;
+  payload: any = {};
+  eventName: string = 'TestEvent';
 
   constructor(readonly entityId: Uuid) {}
 }
@@ -65,6 +67,8 @@ describe('RabbitMQMessageBroker Integration tests', () => {
         entityId: { id: event.entityId.id },
         eventVersion: 1,
         occurrenceDate: event.occurrenceDate.toISOString(),
+        eventName: 'TestEvent',
+        payload: {},
       });
     });
   });

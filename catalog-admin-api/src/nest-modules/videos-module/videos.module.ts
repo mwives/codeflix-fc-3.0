@@ -11,9 +11,9 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { CastMembersModule } from '../cast-members/cast-members.module';
 import { CategoriesModule } from '../categories-module/categories.module';
 import { GenresModule } from '../genres-module/genres.module';
+import { RabbitmqModule } from '../rabbitmq-module/rabbitmq.module';
 import { VideosController } from './videos.controller';
 import { VIDEOS_PROVIDERS } from './videos.provider';
-import { RabbitmqModule } from '../rabbitmq-module/rabbitmq.module';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { RabbitmqModule } from '../rabbitmq-module/rabbitmq.module';
       ImageMediaModel,
       AudioVideoMediaModel,
     ]),
-    RabbitmqModule.forRoot(),
+    RabbitmqModule.forFeature(),
     CategoriesModule,
     GenresModule,
     CastMembersModule,
@@ -34,6 +34,7 @@ import { RabbitmqModule } from '../rabbitmq-module/rabbitmq.module';
   providers: [
     ...Object.values(VIDEOS_PROVIDERS.REPOSITORIES),
     ...Object.values(VIDEOS_PROVIDERS.USE_CASES),
+    ...Object.values(VIDEOS_PROVIDERS.HANDLERS),
   ],
 })
 export class VideosModule {}

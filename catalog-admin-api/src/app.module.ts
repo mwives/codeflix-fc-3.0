@@ -17,11 +17,11 @@ import { VideosModule } from './nest-modules/videos-module/videos.module';
     SharedModule,
     EventModule,
     ApplicationModule,
+    RabbitmqModule.forRoot(),
     CastMembersModule,
     CategoriesModule,
     GenresModule,
     VideosModule,
-    RabbitmqModule.forRoot(),
   ],
 })
 export class AppModule {}

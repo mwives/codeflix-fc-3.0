@@ -5,7 +5,6 @@ import {
 import { VideoId } from '../entity/video.entity';
 import { Trailer } from '../entity/vo/trailer.vo';
 import { VideoMedia } from '../entity/vo/video-media.vo';
-import { ValueObject } from '@core/shared/domain/value-object/value-object';
 
 type VideoAudioMediaReplacedProps = {
   entityId: VideoId;
@@ -37,18 +36,20 @@ export class VideoAudioMediaReplaced implements IDomainEvent {
 export class VideoAudioMediaUploadedIntegrationEvent
   implements IIntegrationEvent
 {
-  eventName: string;
-  payload: any;
-  eventVersion: number;
-  occurrenceDate: Date;
+  declare eventName: string;
+  declare payload: any;
+  declare eventVersion: number;
+  declare occurrenceDate: Date;
 
   constructor(event: VideoAudioMediaReplaced) {
-    this.eventVersion = event.eventVersion;
-    this.occurrenceDate = event.occurrenceDate;
-    this.payload = {
-      video_id: event.entityId.id,
-      media: event.media.toJSON(),
-    };
-    this.eventName = this.constructor.name;
+    this['resourceId'] = `${event.entityId.id}.${event.mediaType}`;
+    this['filePath'] = event.media.rawUrl;
+    // this.eventVersion = event.eventVersion;
+    // this.occurrenceDate = event.occurrenceDate;
+    // this.payload = {
+    //   video_id: event.entityId.id,
+    //   media: event.media.toJSON(),
+    // };
+    // this.eventName = this.constructor.name;
   }
 }
