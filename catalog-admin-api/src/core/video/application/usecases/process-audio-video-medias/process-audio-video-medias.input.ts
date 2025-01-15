@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsString,
   IsUUID,
+  MaxLength,
   validateSync,
 } from 'class-validator';
 
@@ -20,6 +21,8 @@ export class ProcessAudioVideoMediasInput {
   @IsNotEmpty()
   videoId: string;
 
+  @MaxLength(255)
+  @IsString()
   @IsNotEmpty()
   encodedLocation: string;
 
