@@ -22,7 +22,7 @@ services:
       - 3306:3306
 
   rabbitmq:
-    image: rabbitmq:4.0.5-management-alpine
+    build: ./.docker/rabbitmq
     ports:
       - 15672:15672
     environment:
