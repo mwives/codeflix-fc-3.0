@@ -2,9 +2,11 @@ import { AudioVideoMediaStatus } from '@core/shared/domain/value-object/value-ob
 import { ProcessAudioVideoMediasInput } from '@core/video/application/usecases/process-audio-video-medias/process-audio-video-medias.input';
 import { ProcessAudioVideoMediasUseCase } from '@core/video/application/usecases/process-audio-video-medias/process-audio-video-medias.usecase';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { Injectable, ValidationPipe } from '@nestjs/common';
+import { Injectable, UseFilters, ValidationPipe } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
+import { RabbitmqConsumeErrorFilter } from '../rabbitmq-module/rabbitmq-consume-error/rabbitmq-consume-error.filter';
 
+@UseFilters(new RabbitmqConsumeErrorFilter())
 @Injectable()
 export class VideosConsumers {
   constructor(private moduleRef: ModuleRef) {}
@@ -31,21 +33,17 @@ export class VideosConsumers {
       status: msg.video?.status as AudioVideoMediaStatus,
     });
 
-    try {
-      await new ValidationPipe({
-        errorHttpStatusCode: 422,
-      }).transform(input, {
-        metatype: ProcessAudioVideoMediasInput,
-        type: 'body',
-      });
+    await new ValidationPipe({
+      errorHttpStatusCode: 422,
+    }).transform(input, {
+      metatype: ProcessAudioVideoMediasInput,
+      type: 'body',
+    });
 
-      const useCase = await this.moduleRef.resolve(
-        ProcessAudioVideoMediasUseCase,
-      );
+    const useCase = await this.moduleRef.resolve(
+      ProcessAudioVideoMediasUseCase,
+    );
 
-      await useCase.execute(input);
-    } catch (e) {
-      console.error(e);
-    }
+    await useCase.execute(input);
   }
 }
