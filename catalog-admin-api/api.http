@@ -1,4 +1,5 @@
 ## valid uuid = 8f4b7b9c-3f7a-4b6c-8b0c-1c9c5b8b9b6a
+@jwtToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiYWRtaW4tY2F0YWxvZyJdfSwiaWF0IjoxNzM3MzczNTc4LCJleHAiOjE3Mzc0NTk5Nzh9.ate1Va5Yw0_xrBzarKRdtwXLbfkisaBQlsP72g7hRVyqoHol-2Ee7vdzd_TNKZjGhkxEJtOrritygvsBubmOvKfVqIoQjVc3cAUFaohMmBT2iUdbW2DZg9k_EHT84vjkkYWIDNtGqnlEYL_ZXq3UdmdZpZYPrZfXveN8nixVQIoTMBAQq4Q4OhRIWbbj0337rERs9mPvyawQOw_MGO3-Llnm0BuZbL9_yfQ7BK_3JHsqcFL8CH2_Gn194TfXT1tPGjHY-UmevhUPSHZrg5EmfBOeex2TkTqlrV4TdjqGwlpq6Qi5v4beNT4vUmQw5Lh_mCSOpP5b_UIUgbuKd8eu_w
 
 ###
 # @name createCategory
@@ -15,6 +16,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/categories
+Authorization: Bearer {{jwtToken}}
 
 ### Get Category
 GET http://localhost:3000/categories/{{categoryId}}
@@ -113,3 +115,15 @@ username=admin
 &password=admin
 &grant_type=password
 &client_id=codeflix-admin-frontend
+
+### open id configuration
+GET http://localhost:8080/realms/codeflix/.well-known/openid-configuration
+
+### certificates
+GET http://localhost:8080/realms/codeflix/protocol/openid-connect/certs
+
+###
+
+GET http://localhost:3000/auth
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
