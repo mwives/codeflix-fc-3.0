@@ -5,6 +5,7 @@ import { DynamicModule } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import EventEmitter2 from 'eventemitter2';
 import { ApplicationModule } from '../application-module/application.module';
+import { AuthModule } from '../auth-module/auth.module';
 import { ConfigModule } from '../config-module/config.module';
 import { DatabaseModule } from '../database-module/database.module';
 import { EventModule } from '../event-module/event.module';
@@ -41,6 +42,7 @@ describe('VideosModule', () => {
         ApplicationModule,
         DatabaseModule,
         RabbitmqModuleFake.forRoot(),
+        AuthModule,
         VideosModule,
       ],
     })
