@@ -1,27 +1,27 @@
+import { CategoryOutputMapper } from '@core/category/application/use-cases/@shared/category-output';
 import { CreateCategoryUseCase } from '@core/category/application/use-cases/create-category/create-category.usecase';
 import { DeleteCategoryUseCase } from '@core/category/application/use-cases/delete-category/delete-category.usecase';
 import { GetCategoryUseCase } from '@core/category/application/use-cases/get-category/get-category.usecase';
 import { ListCategoriesUseCase } from '@core/category/application/use-cases/list-categories/list-categories.usecase';
 import { UpdateCategoryUseCase } from '@core/category/application/use-cases/update-category/update-category.usecase';
+import { Category } from '@core/category/domain/entity/category.entity';
 import { ICategoryRepository } from '@core/category/domain/repository/category.repository';
+import { Uuid } from '@core/shared/domain/value-object/value-objects/uuid.vo';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthModule } from '../auth-module/auth.module';
 import { ConfigModule } from '../config-module/config.module';
 import { DatabaseModule } from '../database-module/database.module';
 import { CategoriesController } from './categories.controller';
 import { CategoriesModule } from './categories.module';
 import {
-  CreateCategoryFixture,
-  GetCategoryFixture,
-  ListCategoriesFixture,
-  UpdateCategoryFixture,
-} from './testing/category-fixture';
-import {
   CategoryCollectionPresenter,
   CategoryPresenter,
 } from './categories.presenter';
-import { CategoryOutputMapper } from '@core/category/application/use-cases/@shared/category-output';
-import { Uuid } from '@core/shared/domain/value-object/value-objects/uuid.vo';
-import { Category } from '@core/category/domain/entity/category.entity';
+import {
+  CreateCategoryFixture,
+  ListCategoriesFixture,
+  UpdateCategoryFixture,
+} from './testing/category-fixture';
 
 describe('CategoriesController Integration Tests', () => {
   let controller: CategoriesController;
@@ -29,7 +29,12 @@ describe('CategoriesController Integration Tests', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), DatabaseModule, CategoriesModule],
+      imports: [
+        ConfigModule.forRoot(),
+        AuthModule,
+        DatabaseModule,
+        CategoriesModule,
+      ],
     }).compile();
     controller = module.get<CategoriesController>(CategoriesController);
     repository = module.get<ICategoryRepository>('CategoryRepository');

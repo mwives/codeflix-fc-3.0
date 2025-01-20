@@ -16,15 +16,19 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { AdminGuard } from '../auth-module/admin.guard';
+import { AuthGuard } from '../auth-module/auth.guard';
 import {
   CategoryCollectionPresenter,
   CategoryPresenter,
 } from './categories.presenter';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
 import { SearchCategoriesDto } from './dto/search-categories.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
+@UseGuards(AuthGuard, AdminGuard)
 @Controller('categories')
 export class CategoriesController {
   @Inject(CreateCategoryUseCase)
