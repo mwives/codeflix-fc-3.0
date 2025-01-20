@@ -1,14 +1,13 @@
 import { CastMemberId } from '@core/cast-member/domain/entity/cast-member.entity';
 import { CategoryId } from '@core/category/domain/entity/category.entity';
 import { GenreId } from '@core/genre/domain/entity/genre.entity';
-import { VideoCreatedEvent } from '../domain-events/video-created.event';
-import { VideoCreateCommand, Video, VideoId } from './video.entity';
-import { Rating, RatingValues } from './vo/rating.vo';
+import { AudioVideoMediaStatus } from '@core/shared/domain/value-object/value-objects/audio-video-media.vo';
+import { Video, VideoId } from './video.entity';
 import { Banner } from './vo/banner.vo';
+import { Rating } from './vo/rating.vo';
 import { ThumbnailHalf } from './vo/thumbnail-half.vo';
 import { Thumbnail } from './vo/thumbnail.vo';
 import { Trailer } from './vo/trailer.vo';
-import { AudioVideoMediaStatus } from '@core/shared/domain/value-object/value-objects/audio-video-media.vo';
 import { VideoMedia } from './vo/video-media.vo';
 
 describe('Video', () => {
@@ -60,7 +59,7 @@ describe('Video', () => {
         status: AudioVideoMediaStatus.PENDING,
       });
 
-      let video = new Video({
+      const video = new Video({
         title: 'any_title',
         description: 'any_description',
         releaseYear: 2020,
@@ -144,7 +143,7 @@ describe('Video', () => {
         status: AudioVideoMediaStatus.PENDING,
       });
 
-      let video = Video.create({
+      const video = Video.create({
         title: 'any_title',
         description: 'any_description',
         releaseYear: 2020,

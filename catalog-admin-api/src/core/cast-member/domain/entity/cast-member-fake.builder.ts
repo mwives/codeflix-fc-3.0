@@ -6,8 +6,8 @@ type PropOrFactory<T> = T | ((index: number) => T);
 
 export class CastMemberFakeBuilder<TBuild = any> {
   private _castMemberId: PropOrFactory<CastMemberId> | undefined = undefined;
-  private _name: PropOrFactory<string> = (_index) => this.chance.word();
-  private _type: PropOrFactory<CastMemberType> = (_index) =>
+  private _name: PropOrFactory<string> = () => this.chance.word();
+  private _type: PropOrFactory<CastMemberType> = () =>
     CastMemberType.createAnActor();
   private _createdAt: PropOrFactory<Date> | undefined = undefined;
 

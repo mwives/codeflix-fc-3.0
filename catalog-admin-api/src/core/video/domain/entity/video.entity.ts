@@ -246,12 +246,12 @@ export class Video extends AggregateRoot {
     this.castMemberIds = new Map(castMemberIds.map((id) => [id.id, id]));
   }
 
-  onVideoCreated(event: VideoCreatedEvent) {
+  onVideoCreated(_event: VideoCreatedEvent) {
     if (this.isPublished) return;
     this.markAsPublished();
   }
 
-  onAudioVideoMediaReplaced(event: VideoAudioMediaReplaced) {
+  onAudioVideoMediaReplaced(_event: VideoAudioMediaReplaced) {
     if (this.isPublished) return;
     this.markAsPublished();
   }

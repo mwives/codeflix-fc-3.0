@@ -48,9 +48,9 @@ export class UploadImageMediasUseCase
       ]);
     }
 
-    image instanceof Banner && video.replaceBanner(image);
-    image instanceof Thumbnail && video.replaceThumbnail(image);
-    image instanceof ThumbnailHalf && video.replaceThumbnailHalf(image);
+    if (image instanceof Banner) video.replaceBanner(image);
+    if (image instanceof Thumbnail) video.replaceThumbnail(image);
+    if (image instanceof ThumbnailHalf) video.replaceThumbnailHalf(image);
 
     await this.storage.store({
       data: input.file.data,

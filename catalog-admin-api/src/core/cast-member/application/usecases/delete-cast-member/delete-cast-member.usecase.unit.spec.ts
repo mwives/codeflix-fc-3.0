@@ -1,11 +1,8 @@
-import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
-import { DeleteCastMemberUseCase } from './delete-cast-member.usecase';
-import {
-  CastMember,
-  CastMemberId,
-} from '@core/cast-member/domain/entity/cast-member.entity';
 import { CastMemberType } from '@core/cast-member/domain/entity/cast-member-type.vo';
+import { CastMember } from '@core/cast-member/domain/entity/cast-member.entity';
+import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { InvalidUuidError } from '@core/shared/domain/value-object/value-objects/uuid.vo';
+import { DeleteCastMemberUseCase } from './delete-cast-member.usecase';
 
 describe('DeleteCastMemberUsecase Unit Tests', () => {
   let useCase: DeleteCastMemberUseCase;

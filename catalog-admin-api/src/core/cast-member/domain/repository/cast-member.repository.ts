@@ -77,11 +77,10 @@ export class CastMemberSearchParams extends DefaultSearchParams<CastMemberFilter
 
 export class CastMemberSearchResult extends DefaultSearchResult<CastMember> {}
 
-export interface ICastMemberRepository
-  extends ISearchableRepository<
-    CastMember,
-    CastMemberId,
-    CastMemberFilter,
-    CastMemberSearchParams,
-    CastMemberSearchResult
-  > {}
+export type ICastMemberRepository = ISearchableRepository<
+  CastMember,
+  CastMemberId,
+  CastMemberFilter,
+  CastMemberSearchParams,
+  CastMemberSearchResult
+>;

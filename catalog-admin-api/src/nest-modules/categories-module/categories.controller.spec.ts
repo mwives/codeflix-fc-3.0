@@ -29,7 +29,7 @@ describe('CategoriesController', () => {
     const mockCreateUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
     };
-    // @ts-expect-error
+    // @ts-expect-error private property
     controller['createCategoryUseCase'] = mockCreateUseCase;
     const input: CreateCategoryDto = {
       name: 'Movie',
@@ -63,7 +63,7 @@ describe('CategoriesController', () => {
     const mockListUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
     };
-    // @ts-expect-error
+    // @ts-expect-error private property
     controller['listCategoriesUseCase'] = mockListUseCase;
     const searchParams = {
       page: 1,
@@ -92,7 +92,7 @@ describe('CategoriesController', () => {
     const mockGetUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
     };
-    // @ts-expect-error
+    // @ts-expect-error: Property 'getCategoryUseCase' is being set for testing purposes
     controller['getCategoryUseCase'] = mockGetUseCase;
 
     const presenter = await controller.findOne(id);
@@ -114,7 +114,7 @@ describe('CategoriesController', () => {
     const mockUpdateUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
     };
-    // @ts-expect-error
+    // @ts-expect-error private property
     controller['updateCategoryUseCase'] = mockUpdateUseCase;
     const input: Omit<UpdateCategoryInput, 'id'> = {
       name: 'Movie',
@@ -134,7 +134,7 @@ describe('CategoriesController', () => {
     const mockDeleteUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(expectedOutput)),
     };
-    // @ts-expect-error
+    // @ts-expect-error private property
     controller['deleteCategoryUseCase'] = mockDeleteUseCase;
 
     const id = '9366b7dc-2d71-4799-b91c-c64adb205104';

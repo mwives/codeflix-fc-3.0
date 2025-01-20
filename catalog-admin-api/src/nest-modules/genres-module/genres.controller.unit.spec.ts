@@ -36,7 +36,7 @@ describe('GenresController Unit Tests', () => {
         execute: jest.fn().mockResolvedValue(output),
       };
 
-      // @ts-ignore
+      // @ts-expect-error defined part of methods
       controller['createUseCase'] = createUseCaseMock;
 
       const input: CreateGenreDto = {
@@ -75,7 +75,7 @@ describe('GenresController Unit Tests', () => {
         execute: jest.fn().mockResolvedValue(output),
       };
 
-      // @ts-ignore
+      // @ts-expect-error defined part of methods
       controller['getUseCase'] = getUseCaseMock;
 
       const presenter = await controller.findOne(uuid);
@@ -157,7 +157,7 @@ describe('GenresController Unit Tests', () => {
         execute: jest.fn().mockResolvedValue(output),
       };
 
-      // @ts-ignore
+      // @ts-expect-error defined part of methods
       controller['updateUseCase'] = updateUseCaseMock;
 
       const input = {
@@ -184,7 +184,7 @@ describe('GenresController Unit Tests', () => {
         execute: jest.fn().mockResolvedValue(undefined),
       };
 
-      // @ts-ignore
+      // @ts-expect-error defined part of methods
       controller['deleteUseCase'] = deleteUseCaseMock;
 
       await controller.remove(uuid);

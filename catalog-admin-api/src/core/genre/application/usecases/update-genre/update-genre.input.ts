@@ -36,13 +36,11 @@ export class UpdateGenreInput {
   constructor(props?: UpdateGenreInputConstructorProps) {
     if (!props) return;
     this.id = props.id;
-    props.name && (this.name = props.name);
-    props.categoryIds &&
-      props.categoryIds.length > 0 &&
-      (this.categoryIds = props.categoryIds);
-    props.isActive !== null &&
-      props.isActive !== undefined &&
-      (this.isActive = props.isActive);
+    if (props.name) this.name = props.name;
+    if (props.categoryIds && props.categoryIds.length > 0)
+      this.categoryIds = props.categoryIds;
+    if (props.isActive !== null && props.isActive !== undefined)
+      this.isActive = props.isActive;
   }
 }
 

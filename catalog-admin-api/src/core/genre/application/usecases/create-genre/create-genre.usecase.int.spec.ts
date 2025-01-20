@@ -1,17 +1,16 @@
+import { CategoryIdStorageValidator } from '@core/category/application/validations/category-id-storage.validator';
+import { Category } from '@core/category/domain/entity/category.entity';
 import { CategorySequelizeRepository } from '@core/category/infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '@core/category/infra/db/sequelize/category.model';
+import { GenreId } from '@core/genre/domain/entity/genre.entity';
 import { GenreSequelizeRepository } from '@core/genre/infra/db/sequelize/genre-sequelize.repository';
 import {
-  GenreModel,
   GenreCategoryModel,
+  GenreModel,
 } from '@core/genre/infra/db/sequelize/genre.model';
 import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { setupSequelize } from '@core/shared/infra/testing/helpers';
 import { CreateGenreUseCase } from './create-genre.usecase';
-import { CategoryIdStorageValidator } from '@core/category/application/validations/category-id-storage.validator';
-import { Category } from '@core/category/domain/entity/category.entity';
-import { Genre, GenreId } from '@core/genre/domain/entity/genre.entity';
-import { DatabaseError } from 'sequelize';
 
 describe('CreateGenreUseCase Integration Tests', () => {
   let uow: UnitOfWorkSequelize;

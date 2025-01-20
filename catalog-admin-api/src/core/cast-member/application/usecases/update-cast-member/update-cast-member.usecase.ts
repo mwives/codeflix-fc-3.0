@@ -37,7 +37,7 @@ export class UpdateCastMemberUseCase
 
       castMember.changeType(type);
 
-      errorCastMemberType &&
+      if (errorCastMemberType)
         castMember.notification.setError(errorCastMemberType.message, 'type');
     }
 

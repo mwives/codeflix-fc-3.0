@@ -83,7 +83,11 @@ export abstract class InMemoryRepository<
 
     ids.forEach((id) => {
       const item = this.items.find((entity) => entity.entityId.equals(id));
-      item ? existsId.add(id) : notExistsId.add(id);
+      if (item) {
+        existsId.add(id);
+      } else {
+        notExistsId.add(id);
+      }
     });
 
     return {

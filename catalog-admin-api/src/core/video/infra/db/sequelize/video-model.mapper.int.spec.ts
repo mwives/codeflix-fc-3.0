@@ -12,10 +12,10 @@ import { GenreSequelizeRepository } from '@core/genre/infra/db/sequelize/genre-s
 import { GenreModel } from '@core/genre/infra/db/sequelize/genre.model';
 import { LoadEntityError } from '@core/shared/domain/validators/validation.error';
 import { AudioVideoMediaStatus } from '@core/shared/domain/value-object/value-objects/audio-video-media.vo';
-import { VideoId, Video } from '@core/video/domain/entity/video.entity';
+import { UnitOfWorkInMemory } from '@core/shared/infra/db/in-memory/unit-of-work-in-memory';
+import { Video, VideoId } from '@core/video/domain/entity/video.entity';
 import { Banner } from '@core/video/domain/entity/vo/banner.vo';
-import { RatingValues, Rating } from '@core/video/domain/entity/vo/rating.vo';
-import { ThumbnailHalf } from '@core/video/domain/entity/vo/thumbnail-half.vo';
+import { Rating, RatingValues } from '@core/video/domain/entity/vo/rating.vo';
 import { Thumbnail } from '@core/video/domain/entity/vo/thumbnail.vo';
 import { Trailer } from '@core/video/domain/entity/vo/trailer.vo';
 import { VideoMedia } from '@core/video/domain/entity/vo/video-media.vo';
@@ -27,12 +27,11 @@ import { ImageMediaModel, VideoImageMediaType } from './image-media.model';
 import { setupSequelizeForVideo } from './testing/helpers';
 import { VideoModelMapper } from './video-model.mapper';
 import {
-  VideoModel,
+  VideoCastMemberModel,
   VideoCategoryModel,
   VideoGenreModel,
-  VideoCastMemberModel,
+  VideoModel,
 } from './video.model';
-import { UnitOfWorkInMemory } from '@core/shared/infra/db/in-memory/unit-of-work-in-memory';
 
 describe('VideoModelMapper Unit Tests', () => {
   let categoryRepo: ICategoryRepository;

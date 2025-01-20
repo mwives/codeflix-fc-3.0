@@ -125,7 +125,7 @@ describe('VideoFakerBuilder', () => {
 
       expect([
         faker['_categoryIds'][0],
-        // @ts-expect-error
+        // @ts-expect-error categoryIds is a callable
         faker['_categoryIds'][1](),
       ]).toStrictEqual([categoryId1, categoryId2]);
     });
@@ -172,7 +172,7 @@ describe('VideoFakerBuilder', () => {
       expect(faker['_createdAt']).toBe(date);
 
       faker.withCreatedAt(() => date);
-      //@ts-expect-error
+      //@ts-expect-error createdAt is a callable
       expect(faker['_createdAt']()).toBe(date);
       expect(faker.createdAt).toBe(date);
     });

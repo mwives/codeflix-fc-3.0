@@ -1,5 +1,4 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
-import { Category } from '../../../domain/entity/category.entity';
 
 export type CategoryModelProps = {
   categoryId: string;

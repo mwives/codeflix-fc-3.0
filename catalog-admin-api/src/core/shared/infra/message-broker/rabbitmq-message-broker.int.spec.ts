@@ -47,7 +47,9 @@ describe('RabbitMQMessageBroker Integration tests', () => {
   afterEach(async () => {
     try {
       await connection.managedConnection.close();
-    } catch (err) {}
+    } catch {
+      // ignore
+    }
   });
 
   describe('publish', () => {

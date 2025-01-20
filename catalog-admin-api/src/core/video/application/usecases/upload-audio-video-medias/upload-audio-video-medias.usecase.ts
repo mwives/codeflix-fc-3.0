@@ -50,8 +50,9 @@ export class UploadAudioVideoMediasUseCase
       ]);
     }
 
-    audioVideoMedia instanceof Trailer && video.replaceTrailer(audioVideoMedia);
-    audioVideoMedia instanceof VideoMedia &&
+    if (audioVideoMedia instanceof Trailer)
+      video.replaceTrailer(audioVideoMedia);
+    if (audioVideoMedia instanceof VideoMedia)
       video.replaceVideo(audioVideoMedia);
 
     await this.storage.store({

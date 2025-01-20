@@ -73,23 +73,19 @@ export class UpdateVideoInput {
   constructor(props?: UpdateVideoInputConstructorProps) {
     if (!props) return;
     this.id = props.id;
-    props.title && (this.title = props.title);
-    props.description && (this.description = props.description);
-    props.releaseYear && (this.releaseYear = props.releaseYear);
-    props.duration && (this.duration = props.duration);
-    props.rating && (this.rating = props.rating);
-    props.isNewRelease !== null &&
-      props.isNewRelease !== undefined &&
-      (this.isNewRelease = props.isNewRelease);
-    props.categoryIds &&
-      props.categoryIds.length > 0 &&
-      (this.categoryIds = props.categoryIds);
-    props.genreIds &&
-      props.genreIds.length > 0 &&
-      (this.genreIds = props.genreIds);
-    props.castMemberIds &&
-      props.castMemberIds.length > 0 &&
-      (this.castMemberIds = props.castMemberIds);
+    if (props.title) this.title = props.title;
+    if (props.description) this.description = props.description;
+    if (props.releaseYear) this.releaseYear = props.releaseYear;
+    if (props.duration) this.duration = props.duration;
+    if (props.rating) this.rating = props.rating;
+    if (props.isNewRelease !== null && props.isNewRelease !== undefined)
+      this.isNewRelease = props.isNewRelease;
+    if (props.categoryIds && props.categoryIds.length > 0)
+      this.categoryIds = props.categoryIds;
+    if (props.genreIds && props.genreIds.length > 0)
+      this.genreIds = props.genreIds;
+    if (props.castMemberIds && props.castMemberIds.length > 0)
+      this.castMemberIds = props.castMemberIds;
   }
 }
 

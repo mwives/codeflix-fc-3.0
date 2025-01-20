@@ -27,8 +27,12 @@ export class UpdateGenreUseCase
       throw new NotFoundError(input.id, Genre);
     }
 
-    input.name && genre.changeName(input.name);
-    input.isActive ? genre.activate() : genre.deactivate();
+    if (input.name) genre.changeName(input.name);
+    if (input.isActive) {
+      genre.activate();
+    } else {
+      genre.deactivate();
+    }
 
     const notification = genre.notification;
 
@@ -37,9 +41,8 @@ export class UpdateGenreUseCase
         await this.categoryIdStorageValidator.validate(input.categoryIds)
       ).asArray();
 
-      validatedCategoryIds && genre.syncCategoryIds(validatedCategoryIds);
-
-      categoryIdsValidationErrors &&
+      if (validatedCategoryIds) genre.syncCategoryIds(validatedCategoryIds);
+      if (categoryIdsValidationErrors)
         notification.setError(
           categoryIdsValidationErrors.map((e) => e.message),
           'categoryIds',

@@ -174,7 +174,7 @@ describe('GenreModel Integration Tests', () => {
         },
       );
 
-      const { categoryIds, ...genreCommonProps } = genreModelData;
+      const { categoryIds: _, ...genreCommonProps } = genreModelData;
       expect(genreWithCategories).toMatchObject(genreCommonProps);
       expect(genreWithCategories!.categories).toHaveLength(3);
       expect(genreWithCategories!.categories).toEqual(

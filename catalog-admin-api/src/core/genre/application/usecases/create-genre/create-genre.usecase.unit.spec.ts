@@ -8,7 +8,6 @@ import { GenreInMemoryRepository } from '@core/genre/infra/db/in-memory/genre-in
 import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 import { UnitOfWorkInMemory } from '@core/shared/infra/db/in-memory/unit-of-work-in-memory';
 import { CreateGenreUseCase } from './create-genre.usecase';
-import { Genre } from '@core/genre/domain/entity/genre.entity';
 
 describe('CreateGenreUseCase Unit Tests', () => {
   let useCase: CreateGenreUseCase;

@@ -25,7 +25,7 @@ export class CastMember extends AggregateRoot {
   type: CastMemberType;
   createdAt: Date;
 
-  constructor(props: CastMemberProps, id?: CastMemberId) {
+  constructor(props: CastMemberProps, _id?: CastMemberId) {
     super();
     this.castMemberId = props.castMemberId ?? new CastMemberId();
     this.name = props.name;

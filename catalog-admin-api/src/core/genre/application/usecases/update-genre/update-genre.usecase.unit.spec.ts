@@ -7,10 +7,9 @@ import { CategoryInMemoryRepository } from '@core/category/infra/db/in-memory/ca
 import { Genre, GenreId } from '@core/genre/domain/entity/genre.entity';
 import { GenreInMemoryRepository } from '@core/genre/infra/db/in-memory/genre-in-memory.repository';
 import { NotFoundError } from '@core/shared/domain/error/not-found.error';
+import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 import { UnitOfWorkInMemory } from '@core/shared/infra/db/in-memory/unit-of-work-in-memory';
 import { UpdateGenreUseCase } from './update-genre.usecase';
-import { InvalidUuidError } from '@core/shared/domain/value-object/value-objects/uuid.vo';
-import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
 
 describe('UpdateGenreUseCase Unit Tests', () => {
   let useCase: UpdateGenreUseCase;

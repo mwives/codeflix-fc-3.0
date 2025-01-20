@@ -25,28 +25,21 @@ export class UpdateVideoUseCase
     const videoId = new VideoId(input.id);
     const video = await this.videoRepo.findById(videoId);
 
-    if (!video) {
-      throw new NotFoundError(input.id, Video);
-    }
+    if (!video) throw new NotFoundError(input.id, Video);
 
-    input.title && video.changeTitle(input.title);
-    input.description && video.changeDescription(input.description);
-    input.releaseYear && video.changeReleaseYear(input.releaseYear);
-    input.duration && video.changeDuration(input.duration);
+    if (input.title) video.changeTitle(input.title);
+    if (input.description) video.changeDescription(input.description);
+    if (input.releaseYear) video.changeReleaseYear(input.releaseYear);
+    if (input.duration) video.changeDuration(input.duration);
 
     if (input.rating) {
       const [type, errorRating] = Rating.create(input.rating).asArray();
       video.changeRating(type);
-      errorRating && video.notification.setError(errorRating.message, 'type');
+      if (errorRating) video.notification.setError(errorRating.message, 'type');
     }
 
-    if (input.isNewRelease === true) {
-      video.markAsNewRelease();
-    }
-
-    if (input.isNewRelease === false) {
-      video.markAsNotNewRelease();
-    }
+    if (input.isNewRelease === true) video.markAsNewRelease();
+    if (input.isNewRelease === false) video.markAsNotNewRelease();
 
     const notification = video.notification;
 
@@ -55,9 +48,8 @@ export class UpdateVideoUseCase
         await this.categoriesIdValidator.validate(input.categoryIds)
       ).asArray();
 
-      categoriesId && video.syncCategoryIds(categoriesId);
-
-      errorsCategoriesId &&
+      if (categoriesId) video.syncCategoryIds(categoriesId);
+      if (errorsCategoriesId)
         notification.setError(
           errorsCategoriesId.map((e) => e.message),
           'categoryIds',
@@ -69,9 +61,8 @@ export class UpdateVideoUseCase
         await this.genresIdValidator.validate(input.genreIds)
       ).asArray();
 
-      genresId && video.syncGenresId(genresId);
-
-      errorsGenresId &&
+      if (genresId) video.syncGenresId(genresId);
+      if (errorsGenresId)
         notification.setError(
           errorsGenresId.map((e) => e.message),
           'genreIds',
@@ -83,9 +74,8 @@ export class UpdateVideoUseCase
         await this.castMembersIdValidator.validate(input.castMemberIds)
       ).asArray();
 
-      castMembersId && video.syncCastMembersId(castMembersId);
-
-      errorsCastMembersId &&
+      if (castMembersId) video.syncCastMembersId(castMembersId);
+      if (errorsCastMembersId)
         notification.setError(
           errorsCastMembersId.map((e) => e.message),
           'castMemberIds',

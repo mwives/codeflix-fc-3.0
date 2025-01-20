@@ -1,9 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { DatabaseModule } from './database.module';
-import { ConfigModule } from 'src/nest-modules/config-module/config.module';
-import { Sequelize } from 'sequelize-typescript';
 import { getConnectionToken } from '@nestjs/sequelize';
-import { ConfigService } from '@nestjs/config';
+import { Test } from '@nestjs/testing';
+import { Sequelize } from 'sequelize-typescript';
+import { ConfigModule } from 'src/nest-modules/config-module/config.module';
+import { DatabaseModule } from './database.module';
 
 describe('DatabaseModule', () => {
   describe('sqlite', () => {

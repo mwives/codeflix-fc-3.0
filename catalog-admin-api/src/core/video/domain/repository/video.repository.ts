@@ -84,11 +84,10 @@ export class VideoSearchParams extends SearchParams<VideoFilter> {
 
 export class VideoSearchResult extends SearchResult<Video> {}
 
-export interface IVideoRepository
-  extends ISearchableRepository<
-    Video,
-    VideoId,
-    VideoFilter,
-    VideoSearchParams,
-    VideoSearchResult
-  > {}
+export type IVideoRepository = ISearchableRepository<
+  Video,
+  VideoId,
+  VideoFilter,
+  VideoSearchParams,
+  VideoSearchResult
+>;

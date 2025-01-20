@@ -17,7 +17,7 @@ export class CastMemberModelMapper {
   }
 
   static toEntity(model: CastMemberModel) {
-    const { castMemberId, ...castMemberData } = model.toJSON();
+    const { castMemberId: _, ...castMemberData } = model.toJSON();
     const [type, castMemberTypeError] = CastMemberType.create(
       castMemberData.type,
     ).asArray();

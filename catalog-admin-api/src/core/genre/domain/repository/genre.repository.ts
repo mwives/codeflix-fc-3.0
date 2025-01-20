@@ -62,11 +62,10 @@ export class GenreSearchParams extends SearchParams<GenreFilter> {
 
 export class GenreSearchResult extends SearchResult<Genre> {}
 
-export interface IGenreRepository
-  extends ISearchableRepository<
-    Genre,
-    GenreId,
-    GenreFilter,
-    GenreSearchParams,
-    GenreSearchResult
-  > {}
+export type IGenreRepository = ISearchableRepository<
+  Genre,
+  GenreId,
+  GenreFilter,
+  GenreSearchParams,
+  GenreSearchResult
+>;
