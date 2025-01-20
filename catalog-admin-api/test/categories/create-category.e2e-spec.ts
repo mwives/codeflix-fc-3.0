@@ -27,6 +27,7 @@ describe('CategoriesController (e2e)', () => {
         async ({ sendData, expected }) => {
           const res = await request(appHelper.app.getHttpServer())
             .post('/categories')
+            .authenticate(appHelper.app)
             .send(sendData)
             .expect(201);
 
@@ -70,6 +71,7 @@ describe('CategoriesController (e2e)', () => {
           async ({ value }) => {
             const res = await request(appHelper.app.getHttpServer())
               .post('/categories')
+              .authenticate(appHelper.app)
               .send(value)
               .expect(422);
 
@@ -92,6 +94,7 @@ describe('CategoriesController (e2e)', () => {
           async ({ value }) => {
             const res = await request(appHelper.app.getHttpServer())
               .post('/categories')
+              .authenticate(appHelper.app)
               .send(value)
               .expect(422);
 
@@ -99,6 +102,29 @@ describe('CategoriesController (e2e)', () => {
             expect(res.body.error).toContain('Unprocessable Entity');
           },
         );
+      });
+    });
+
+    describe('unauthenticated user', () => {
+      it('should return 401 when user is not authenticated', async () => {
+        const res = await request(appHelper.app.getHttpServer())
+          .post('/categories')
+          .send({})
+          .expect(401);
+
+        expect(res.body).toHaveProperty('message');
+        expect(res.body.message).toContain('Unauthorized');
+      });
+
+      it('should return 403 when user is authenticated but not authorized', async () => {
+        const res = await request(appHelper.app.getHttpServer())
+          .post('/categories')
+          .authenticate(appHelper.app, false)
+          .send({})
+          .expect(403);
+
+        expect(res.body).toHaveProperty('message');
+        expect(res.body.message).toContain('Forbidden');
       });
     });
   });

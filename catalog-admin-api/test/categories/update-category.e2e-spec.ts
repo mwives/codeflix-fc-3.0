@@ -23,6 +23,7 @@ describe('CategoriesController (e2e)', () => {
     const sendPatchRequest = (id: string, data: any) =>
       request(appHelper.app.getHttpServer())
         .patch(`/categories/${id}`)
+        .authenticate(appHelper.app)
         .send(data);
 
     describe('when the category ID is invalid or not found', () => {

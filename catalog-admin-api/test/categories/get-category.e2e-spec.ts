@@ -46,6 +46,7 @@ describe('CategoriesController (e2e)', () => {
         async ({ id, expected }) => {
           await request(nestApp.app.getHttpServer())
             .get(`/categories/${id}`)
+            .authenticate(nestApp.app)
             .expect(expected.statusCode)
             .expect(expected);
         },
@@ -59,6 +60,7 @@ describe('CategoriesController (e2e)', () => {
 
         const response = await request(nestApp.app.getHttpServer())
           .get(`/categories/${category.categoryId.id}`)
+          .authenticate(nestApp.app)
           .expect(200);
 
         const expectedKeys = GetCategoryFixture.keysInResponse;
