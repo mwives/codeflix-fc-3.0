@@ -10,9 +10,16 @@ import { startApp } from 'src/nest-modules/shared-module/testing/helpers';
 import request from 'supertest';
 
 describe('CastMembersController (e2e)', () => {
-  const appHelper = startApp();
-
   const uuid = '9366b7dc-2d71-4799-b91c-c64adb205104';
+
+  const appHelper = startApp();
+  let castMemberRepository: ICastMemberRepository;
+
+  beforeEach(() => {
+    castMemberRepository = appHelper.app.get<ICastMemberRepository>(
+      CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
+    );
+  });
 
   describe('PATCH /cast-members/:id', () => {
     describe('update a cast member with invalid input', () => {
@@ -53,14 +60,14 @@ describe('CastMembersController (e2e)', () => {
       });
 
       describe('should a response error with 422 when body is invalid', () => {
-        const app = startApp();
         const invalidRequest = UpdateCastMemberFixture.arrangeInvalidRequest();
         const arrange = Object.keys(invalidRequest).map((key) => ({
           label: key,
           value: invalidRequest[key],
         }));
+
         test.each(arrange)('when body is $label', ({ value }) => {
-          return request(app.app.getHttpServer())
+          return request(appHelper.app.getHttpServer())
             .patch(`/cast-members/${uuid}`)
             .send(value.sendData)
             .expect(422)
@@ -70,24 +77,17 @@ describe('CastMembersController (e2e)', () => {
     });
 
     describe('should a response error with 422 when body is invalid', () => {
-      const app = startApp();
       const validationError =
         UpdateCastMemberFixture.arrangeForEntityValidationError();
       const arrange = Object.keys(validationError).map((key) => ({
         label: key,
         value: validationError[key],
       }));
-      let castMemberRepo: ICastMemberRepository;
 
-      beforeEach(() => {
-        castMemberRepo = app.app.get<ICastMemberRepository>(
-          CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
-        );
-      });
       test.each(arrange)('when body is $label', async ({ value }) => {
         const castMember = CastMember.fake().anActor().build();
-        await castMemberRepo.insert(castMember);
-        return request(app.app.getHttpServer())
+        await castMemberRepository.insert(castMember);
+        return request(appHelper.app.getHttpServer())
           .patch(`/cast-members/${castMember.castMemberId.id}`)
           .send(value.sendData)
           .expect(422)
@@ -98,34 +98,32 @@ describe('CastMembersController (e2e)', () => {
     describe('update a cast member with valid input', () => {
       describe('should return a cast member', () => {
         const arrange = UpdateCastMemberFixture.arrangeForUpdate();
-        let castMemberRepo: ICastMemberRepository;
 
-        beforeEach(async () => {
-          castMemberRepo = appHelper.app.get<ICastMemberRepository>(
-            CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
-          );
-        });
         test.each(arrange)(
           'when body is $sendData',
           async ({ sendData, expected }) => {
             const castMemberCreated = CastMember.fake().anActor().build();
-            await castMemberRepo.insert(castMemberCreated);
+            await castMemberRepository.insert(castMemberCreated);
 
             const res = await request(appHelper.app.getHttpServer())
               .patch(`/cast-members/${castMemberCreated.castMemberId.id}`)
               .send(sendData)
               .expect(200);
             const keyInResponse = UpdateCastMemberFixture.keysInResponse;
+
             expect(Object.keys(res.body)).toStrictEqual(['data']);
             expect(Object.keys(res.body.data)).toStrictEqual(keyInResponse);
+
             const id = res.body.data.id;
-            const castMemberUpdated = await castMemberRepo.findById(
+            const castMemberUpdated = await castMemberRepository.findById(
               new Uuid(id),
             );
+
             const presenter = CastMembersController.serialize(
               CastMemberOutputMapper.toDTO(castMemberUpdated),
             );
             const serialized = instanceToPlain(presenter);
+
             expect(res.body.data).toStrictEqual(serialized);
             expect(res.body.data).toStrictEqual({
               id: serialized.id,

@@ -11,17 +11,20 @@ import request from 'supertest';
 describe('CastMembersController (e2e)', () => {
   describe('GET /cast-members', () => {
     const appHelper = startApp();
+    let castMemberRepository: ICastMemberRepository;
+
+    beforeEach(async () => {
+      castMemberRepository = appHelper.app.get<ICastMemberRepository>(
+        CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
+      );
+    });
 
     describe('list cast members with valid input', () => {
       describe('should return cast members using paginate', () => {
-        let castMemberRepository: ICastMemberRepository;
         const { entitiesMap, arrange } =
           ListCastMembersFixture.arrangeIncrementedWithCreatedAt();
 
         beforeEach(async () => {
-          castMemberRepository = appHelper.app.get<ICastMemberRepository>(
-            CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
-          );
           await castMemberRepository.bulkInsert(Object.values(entitiesMap));
         });
 
@@ -47,23 +50,18 @@ describe('CastMembersController (e2e)', () => {
       });
 
       describe('should return cast members using sort', () => {
-        let castMemberRepo: ICastMemberRepository;
-        const nestApp = startApp();
         const { entitiesMap, arrange } =
           ListCastMembersFixture.arrangeUnsorted();
 
         beforeEach(async () => {
-          castMemberRepo = nestApp.app.get<ICastMemberRepository>(
-            CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
-          );
-          await castMemberRepo.bulkInsert(Object.values(entitiesMap));
+          await castMemberRepository.bulkInsert(Object.values(entitiesMap));
         });
 
         test.each([arrange[0]])(
           'when query params is $sendData',
           async ({ sendData, expected }) => {
             const queryParams = qs.stringify(sendData as any);
-            return request(nestApp.app.getHttpServer())
+            return request(appHelper.app.getHttpServer())
               .get(`/cast-members/?${queryParams}`)
               .expect(200)
               .expect({
