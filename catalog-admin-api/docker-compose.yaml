@@ -3,11 +3,13 @@ services:
     build: .
     command: ./.docker/start.sh
     ports:
-      - 3000:3000
+      - 3001:3000
     volumes:
       - .:/home/node/app
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    labels:
+      filebeat_collector: true
 
   db:
     image: mysql:8.0.30-debian
