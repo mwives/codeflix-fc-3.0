@@ -8,6 +8,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - ./configs:/home/node/app/config
     depends_on:
       - db
       - rabbitmq
