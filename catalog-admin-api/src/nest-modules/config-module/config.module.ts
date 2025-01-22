@@ -98,6 +98,8 @@ export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}) {
     const { envFilePath, ...configModuleOptions } = options;
 
+    console.log(join(process.cwd(), 'config', `.env`));
+
     return super.forRoot({
       isGlobal: true,
       envFilePath: [

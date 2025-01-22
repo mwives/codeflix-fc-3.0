@@ -82,11 +82,11 @@ jobs:
           GOOGLE_CLOUD_STORAGE_BUCKET_NAME: ${{ secrets.GOOGLE_CLOUD_STORAGE_BUCKET_NAME }}
         run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml up -d
 
+      - name: check env files copied
+        run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -T app ls -la ./config
+
       - name: wait for mysql
         run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -T db mysqladmin ping --silent --wait=30 -uroot -proot
-
-      - name: check if app is up
-        run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml logs app
 
       - name: generate envs
         run: |
