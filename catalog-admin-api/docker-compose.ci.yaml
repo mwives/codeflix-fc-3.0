@@ -4,11 +4,11 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     ports:
-      - 3001:3000
+      - 3000:3000
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./configs:/home/node/app/config
+      - ./config:/home/node/app/config
     depends_on:
       - db
       - rabbitmq
