@@ -82,16 +82,13 @@ jobs:
           GOOGLE_CLOUD_STORAGE_BUCKET_NAME: ${{ secrets.GOOGLE_CLOUD_STORAGE_BUCKET_NAME }}
         run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml up -d
 
-      - name: check env files copied
-        run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -T app ls -la ./config
-
       - name: wait for mysql
         run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -T db mysqladmin ping --silent --wait=30 -uroot -proot
 
-      - name: generate envs
-        run: |
-          docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./config/.env.test.example ./config/.env.test
-          docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./config/.env.e2e.example ./config/.env.e2e
+      # - name: generate envs
+      #   run: |
+      #     docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./config/.env.test.example ./config/.env.test
+      #     docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./config/.env.e2e.example ./config/.env.e2e
 
       - name: run unit and integration tests
         run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -T app npm run test
