@@ -73,7 +73,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
-          file: Dockerfile.prod
+          file: ./catalog-admin-api/Dockerfile.prod
           target: development
 
       - name: up containers
