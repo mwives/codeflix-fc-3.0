@@ -85,6 +85,9 @@ jobs:
       - name: wait for mysql
         run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -T db mysqladmin ping --silent --wait=30 -uroot -proot
 
+      - name: check if app is up
+        run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml logs app
+
       - name: generate envs
         run: |
           docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./config/.env.test.example ./config/.env.test
