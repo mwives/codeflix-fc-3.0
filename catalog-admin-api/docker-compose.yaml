@@ -22,6 +22,8 @@ services:
       - seccomp:unconfined
     ports:
       - 3306:3306
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
 
   rabbitmq:
     build: ./.docker/rabbitmq
