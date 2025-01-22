@@ -8,7 +8,7 @@ name: CI/CD
 on:
   push:
     paths:
-      - 'catalog-admin-api'
+      - 'catalog-admin-api/**'
     branches: ['main']
     # Publish semver tags as releases.
     tags: ['v*.*.*']
