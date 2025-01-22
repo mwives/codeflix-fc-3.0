@@ -12,8 +12,6 @@ services:
       - db
       - rabbitmq
     restart: on-failure
-    env_file:
-      - config/.env
 
   db:
     image: mysql:8.0.30-debian
