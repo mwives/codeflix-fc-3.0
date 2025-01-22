@@ -87,8 +87,8 @@ jobs:
 
       - name: generate envs
         run: |
-          docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./catalog-admin-api/config/.env.test.example ./catalog-admin-api/config/.env.test
-          docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./catalog-admin-api/config/.env.e2e.example ./catalog-admin-api/config/.env.e2e
+          docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./config/.env.test.example ./config/.env.test
+          docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -u root -T app cp ./config/.env.e2e.example ./config/.env.e2e
 
       - name: run unit and integration tests
         run: docker compose -f ./catalog-admin-api/docker-compose.ci.yaml exec -T app npm run test
