@@ -24,7 +24,7 @@ func NewDb() *Database {
 
 func NewDbTest() *gorm.DB {
 	dbInstance := NewDb()
-	dbInstance.Env = "Test"
+	dbInstance.Env = "test"
 	dbInstance.AutoMigrate = true
 	dbInstance.Debug = true
 
@@ -39,7 +39,7 @@ func NewDbTest() *gorm.DB {
 func (db *Database) Connect() (*gorm.DB, error) {
 	var err error
 
-	if db.Env == "Test" {
+	if db.Env == "test" {
 		db.Db, err = gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
 	} else {
 		db.Db, err = gorm.Open(postgres.Open(db.Dsn), &gorm.Config{})
