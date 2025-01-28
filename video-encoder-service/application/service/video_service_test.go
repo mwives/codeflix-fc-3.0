@@ -32,7 +32,7 @@ func prepare() (*domain.Video, *repository.VideoRepositoryDb) {
 	return video, videoRepo
 }
 
-func TestVideoServiceDownloadAndFragment(t *testing.T) {
+func TestVideoService(t *testing.T) {
 	video, videoRepo := prepare()
 
 	videoService := service.NewVideoService()
@@ -43,5 +43,11 @@ func TestVideoServiceDownloadAndFragment(t *testing.T) {
 	assert.Nil(t, err)
 
 	err = videoService.Fragment()
+	assert.Nil(t, err)
+
+	err = videoService.Encode()
+	assert.Nil(t, err)
+
+	err = videoService.CleanUp()
 	assert.Nil(t, err)
 }

@@ -83,6 +83,56 @@ func (v *VideoService) Fragment() error {
 	return nil
 }
 
+func (v *VideoService) Encode() error {
+	localStoragePath := os.Getenv("LOCAL_STORAGE_PATH")
+
+	cmdArgs := []string{
+		fmt.Sprintf("%s/%s.frag", localStoragePath, v.Video.ID),
+		"--use-segment-timeline",
+		"-o",
+		fmt.Sprintf("%s/%s", localStoragePath, v.Video.ID),
+		"-f",
+	}
+
+	cmd := exec.Command("mp4dash", cmdArgs...)
+
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		return err
+	}
+
+	printOutput(output)
+
+	return nil
+}
+
+func (v *VideoService) CleanUp() error {
+	localStoragePath := os.Getenv("LOCAL_STORAGE_PATH")
+
+	err := os.Remove(fmt.Sprintf("%s/%s.mp4", localStoragePath, v.Video.ID))
+	if err != nil {
+		log.Fatalf("error removing mp4 %v", err)
+		return err
+	}
+
+	err = os.Remove(fmt.Sprintf("%s/%s.frag", localStoragePath, v.Video.ID))
+	if err != nil {
+		log.Fatalf("error removing frag %v", err)
+		return err
+	}
+
+	err = os.RemoveAll(fmt.Sprintf("%s/%s", localStoragePath, v.Video.ID))
+	if err != nil {
+		log.Fatalf("error removing folder %v", err)
+		return err
+	}
+
+	fmt.Printf("video %v has been removed", v.Video.ID)
+
+	return nil
+}
+
 func printOutput(out []byte) {
 	if len(out) > 0 {
 		fmt.Println("==== OUTPUT ====")
