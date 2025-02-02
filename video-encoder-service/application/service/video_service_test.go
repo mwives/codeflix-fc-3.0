@@ -32,7 +32,7 @@ func prepare() (*domain.Video, *repository.VideoRepositoryDb) {
 	return video, videoRepo
 }
 
-func TestVideoService(t *testing.T) {
+func TestVideoServiceWorkflow(t *testing.T) {
 	video, videoRepo := prepare()
 
 	videoService := service.NewVideoService()
