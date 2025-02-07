@@ -4,6 +4,17 @@ services:
     volumes:
       - .:/go/src/
 
+  db:
+    image: 'postgres:9.6'
+    tty: true
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: encoder
+    volumes:
+      - .pgdata:/var/lib/postgresql/data
+
   rmq:
     image: 'rabbitmq:3-management'
     environment:
