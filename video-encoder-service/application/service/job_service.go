@@ -68,9 +68,9 @@ func (j *JobService) performUpload() error {
 	videoUpload.OutputBucket = os.Getenv("OUTPUT_BUCKET_NAME")
 	videoUpload.VideoPath = fmt.Sprintf("%s/%s", os.Getenv("LOCAL_STORAGE_PATH"), j.VideoService.Video.ID)
 
-	maxConcurrentUploads, err := strconv.Atoi(os.Getenv("MAX_CONCURRENCY"))
+	maxConcurrentUploads, err := strconv.Atoi(os.Getenv("MAX_UPLOAD_CONCURRENCY"))
 	if err != nil {
-		return fmt.Errorf("invalid MAX_CONCURRENCY value: %w", err)
+		return fmt.Errorf("invalid MAX_UPLOAD_CONCURRENCY value: %w", err)
 	}
 
 	doneUpload := make(chan string)
