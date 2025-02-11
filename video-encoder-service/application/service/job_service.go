@@ -78,7 +78,7 @@ func (j *JobService) performUpload() error {
 
 	uploadResult := <-doneUpload
 
-	if uploadResult != "upload completed" {
+	if uploadResult != "Upload completed" {
 		return j.failJob(errors.New(uploadResult))
 	}
 
