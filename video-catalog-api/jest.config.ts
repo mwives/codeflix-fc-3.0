@@ -27,6 +27,10 @@ const config: Config = {
   },
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: 'src',
+  setupFilesAfterEnv: [
+    './core/shared/infra/testing/expect-helpers.ts',
+    './core/shared/infra/testing/global-helpers.ts',
+  ],
   testEnvironment: 'node',
   testRegex: '.*\\..*spec\\.ts$',
   transform: {
@@ -35,3 +39,4 @@ const config: Config = {
 };
 
 export default config;
+
