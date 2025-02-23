@@ -1,8 +1,8 @@
 import { Category, CategoryId } from '@core/category/domain/category.aggregate';
 import { CategoryElasticSearchRepository } from '@core/category/infra/db/elastic-search/category-elastic-search';
 import { setupElasticsearch } from '@core/shared/infra/testing/global-helpers';
-import { SaveCategoryInput } from './save-category.input';
-import { SaveCategoryUseCase } from './save-category.use-case';
+import { SaveCategoryInput } from '../save-category.input';
+import { SaveCategoryUseCase } from '../save-category.use-case';
 
 describe('SaveCategoryUseCase Integration Tests', () => {
   let useCase: SaveCategoryUseCase;

@@ -1,7 +1,7 @@
 import { Category, CategoryId } from '@core/category/domain/category.aggregate';
 import { CategoryInMemoryRepository } from '@core/category/infra/db/in-memory/category-in-memory.repository';
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
-import { GetCategoryUseCase } from './get-category.use-case';
+import { GetCategoryUseCase } from '../get-category.use-case';
 
 describe('GetCategoryUseCase Unit Tests', () => {
   let useCase: GetCategoryUseCase;

@@ -1,7 +1,7 @@
 import { Category } from '@core/category/domain/category.aggregate';
 import { CategoryElasticSearchRepository } from '@core/category/infra/db/elastic-search/category-elastic-search';
 import { setupElasticsearch } from '@core/shared/infra/testing/global-helpers';
-import { ListAllCategoriesUseCase } from './list-all-categories.use-case';
+import { ListAllCategoriesUseCase } from '../list-all-categories.use-case';
 
 describe('ListAllCategoriesUseCase Integration Tests', () => {
   let useCase: ListAllCategoriesUseCase;

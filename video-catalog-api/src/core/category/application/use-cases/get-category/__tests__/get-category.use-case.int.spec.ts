@@ -2,7 +2,7 @@ import { Category, CategoryId } from '@core/category/domain/category.aggregate';
 import { CategoryElasticSearchRepository } from '@core/category/infra/db/elastic-search/category-elastic-search';
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
 import { setupElasticsearch } from '@core/shared/infra/testing/global-helpers';
-import { GetCategoryUseCase } from './get-category.use-case';
+import { GetCategoryUseCase } from '../get-category.use-case';
 
 describe('GetCategoryUseCase Integration Tests', () => {
   let useCase: GetCategoryUseCase;

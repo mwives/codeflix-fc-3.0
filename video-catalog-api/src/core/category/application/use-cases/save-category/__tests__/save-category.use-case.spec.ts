@@ -1,7 +1,7 @@
 import { CategoryId, Category } from '@core/category/domain/category.aggregate';
 import { CategoryInMemoryRepository } from '@core/category/infra/db/in-memory/category-in-memory.repository';
-import { SaveCategoryInput } from './save-category.input';
-import { SaveCategoryUseCase } from './save-category.use-case';
+import { SaveCategoryInput } from '../save-category.input';
+import { SaveCategoryUseCase } from '../save-category.use-case';
 
 describe('SaveCategoryUseCase Unit Tests', () => {
   let useCase: SaveCategoryUseCase;
