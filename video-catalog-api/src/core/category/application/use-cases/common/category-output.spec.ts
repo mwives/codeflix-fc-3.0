@@ -22,6 +22,19 @@ describe('CategoryOutputMapper Unit Tests', () => {
       description: 'any_description',
       is_active: true,
       created_at: entity.created_at,
+      deleted_at: null,
+    });
+
+    entity.markAsDeleted();
+
+    const outputDeleted = CategoryOutputMapper.toOutput(entity);
+    expect(outputDeleted).toStrictEqual({
+      id: entity.category_id.id,
+      name: 'any_name',
+      description: 'any_description',
+      is_active: true,
+      created_at: entity.created_at,
+      deleted_at: entity.deleted_at,
     });
   });
 });

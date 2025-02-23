@@ -24,5 +24,3 @@ export class CategoryValidatorFactory {
     return new CategoryValidator();
   }
 }
-
-export default CategoryValidatorFactory;

@@ -11,6 +11,7 @@ export class CategoryFakeBuilder<TBuild = any> {
     this.chance.paragraph();
   private _is_active: PropOrFactory<boolean> = (_index) => true;
   private _created_at: PropOrFactory<Date> = (_index) => new Date();
+  private _deleted_at: PropOrFactory<Date | null> = (_index) => null;
 
   private countObjs;
   private chance: Chance.Chance;
@@ -58,6 +59,16 @@ export class CategoryFakeBuilder<TBuild = any> {
     return this;
   }
 
+  deleted() {
+    this._deleted_at = new Date();
+    return this;
+  }
+
+  undeleted() {
+    this._deleted_at = null;
+    return this;
+  }
+
   withInvalidNameTooLong(value?: string) {
     this._name = value ?? this.chance.word({ length: 256 });
     return this;
@@ -73,6 +84,7 @@ export class CategoryFakeBuilder<TBuild = any> {
           description: this.callFactory(this._description, index),
           is_active: this.callFactory(this._is_active, index),
           created_at: this.callFactory(this._created_at, index),
+          deleted_at: this.callFactory(this._deleted_at, index),
         });
         category.validate();
         return category;
@@ -100,6 +112,10 @@ export class CategoryFakeBuilder<TBuild = any> {
 
   get created_at() {
     return this.getValue('created_at');
+  }
+
+  get deleted_at() {
+    return this.getValue('deleted_at');
   }
 
   private getValue(prop: any) {
