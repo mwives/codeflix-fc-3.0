@@ -6,8 +6,8 @@ import { SortDirection } from '@core/shared/domain/repository/search-params';
 import { LoadEntityError } from '@core/shared/domain/validators/validation.error';
 import { SoftDeleteElasticSearchCriteria } from '@core/shared/infra/db/elastic-search/soft-delete-elastic-search.criteria';
 import {
-  QueryDslQueryContainer,
   GetGetResult,
+  QueryDslQueryContainer,
 } from '@elastic/elasticsearch/api/types';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 
@@ -359,13 +359,140 @@ export class CategoryElasticSearchRepository implements ICategoryRepository {
     };
   }
 
-  async update(entity: Category): Promise<void> {
-    let query: QueryDslQueryContainer = {
+  async hasOnlyOneActivateInRelated(categoryId: CategoryId): Promise<boolean> {
+    const query: QueryDslQueryContainer = {
       bool: {
         must: [
           {
+            nested: {
+              path: 'categories',
+              query: {
+                bool: {
+                  must: [
+                    {
+                      match: {
+                        'categories.category_id': categoryId.id,
+                      },
+                    },
+                    {
+                      match: {
+                        'categories.is_active': true,
+                      },
+                    },
+                  ],
+                  must_not: [
+                    {
+                      exists: {
+                        field: 'categories.deleted_at',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+        filter: {
+          script: {
+            script: {
+              source: `
+                def count = 0;
+                for(item in doc['categories__is_active']) {
+                  if (item == true) {
+                    count = count + 1;
+                  }
+                }
+                return count == 1;
+              `,
+            },
+          },
+        },
+      },
+    };
+    const result = await this.esClient.search({
+      index: this.index,
+      body: {
+        query,
+      },
+      _source: false as any,
+    });
+    return result.body.hits.total.value >= 1;
+  }
+
+  async hasOnlyOneNotDeletedInRelated(
+    categoryId: CategoryId,
+  ): Promise<boolean> {
+    const query: QueryDslQueryContainer = {
+      bool: {
+        must: [
+          {
+            nested: {
+              path: 'categories',
+              query: {
+                bool: {
+                  must: [
+                    {
+                      match: {
+                        'categories.category_id': categoryId.id,
+                      },
+                    },
+                  ],
+                  must_not: [
+                    {
+                      exists: {
+                        field: 'categories.deleted_at',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+        filter: {
+          script: {
+            script: {
+              source: `
+                def count = 0;
+                for(item in doc['categories__is_deleted']) {
+                  if (item == false) {
+                    count = count + 1;
+                  }
+                }
+                return count == 1;
+              `,
+            },
+          },
+        },
+      },
+    };
+    const result = await this.esClient.search({
+      index: this.index,
+      body: {
+        query,
+      },
+      _source: false as any,
+    });
+    return result.body.hits.total.value >= 1;
+  }
+
+  async update(entity: Category): Promise<void> {
+    let query: QueryDslQueryContainer = {
+      bool: {
+        should: [
+          {
             match: {
               _id: entity.category_id.id,
+            },
+          },
+          {
+            nested: {
+              path: 'categories',
+              query: {
+                match: {
+                  'categories.category_id': entity.category_id.id,
+                },
+              },
             },
           },
         ],
@@ -378,13 +505,28 @@ export class CategoryElasticSearchRepository implements ICategoryRepository {
         query,
         script: {
           source: `
+          if (ctx._source.containsKey('categories')) {
+            for(item in ctx._source.categories) {
+              if (item.category_id == params.category_id) {
+                item.category_name = params.category_name;
+                item.is_active = params.is_active;
+                item.deleted_at = params.deleted_at;
+                item.is_deleted = params.is_deleted;
+              }
+            }
+          }else{
             ctx._source.category_name = params.category_name;
-            ctx._source.category_description = params.category_description;
+            ctx._source.description = params.description; 
             ctx._source.is_active = params.is_active;
             ctx._source.created_at = params.created_at;
             ctx._source.deleted_at = params.deleted_at;
-          `,
-          params: CategoryElasticSearchMapper.toDocument(entity),
+          }  
+        `,
+          params: {
+            category_id: entity.category_id.id,
+            ...CategoryElasticSearchMapper.toDocument(entity),
+            is_deleted: entity.deleted_at ? true : false,
+          },
         },
       },
       refresh: true,

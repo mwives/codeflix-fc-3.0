@@ -36,6 +36,20 @@ export class SaveCategoryUseCase
   }
 
   private async updateCategory(input: SaveCategoryInput, category: Category) {
+    if (input.is_active === false) {
+      const hasOnlyOneActivateInRelated =
+        await this.categoryRepository.hasOnlyOneActivateInRelated(
+          category.category_id,
+        );
+      if (hasOnlyOneActivateInRelated) {
+        throw new EntityValidationError([
+          {
+            is_active: ['At least one category must be active in related.'],
+          },
+        ]);
+      }
+    }
+
     category.changeName(input.name);
     category.changeDescription(input.description);
 

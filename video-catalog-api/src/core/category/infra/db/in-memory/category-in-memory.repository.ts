@@ -7,6 +7,15 @@ export class CategoryInMemoryRepository
   implements ICategoryRepository
 {
   sortableFields: string[] = ['name', 'created_at'];
+
+  hasOnlyOneActivateInRelated(_categoryId: CategoryId): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+
+  hasOnlyOneNotDeletedInRelated(_categoryId: CategoryId): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+
   getEntity(): new (...args: any[]) => Category {
     return Category;
   }

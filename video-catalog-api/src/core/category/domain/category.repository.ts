@@ -61,4 +61,7 @@ export class CategorySearchParams extends SearchParams<CategoryFilter> {
 
 export class CategorySearchResult extends SearchResult<Category> {}
 
-export type ICategoryRepository = IRepository<Category, CategoryId>;
+export interface ICategoryRepository extends IRepository<Category, CategoryId> {
+  hasOnlyOneActivateInRelated(categoryId: CategoryId): Promise<boolean>;
+  hasOnlyOneNotDeletedInRelated(categoryId: CategoryId): Promise<boolean>;
+}

@@ -15,6 +15,15 @@ export class DeleteCategoryUseCase
       throw new NotFoundError(input.id, Category);
     }
 
+    const hasOnlyOneNotDeletedInRelated =
+      await this.categoryRepo.hasOnlyOneNotDeletedInRelated(
+        category.category_id,
+      );
+
+    if (hasOnlyOneNotDeletedInRelated) {
+      throw new Error('At least one category must be present in related.');
+    }
+
     category.markAsDeleted();
 
     await this.categoryRepo.update(category);

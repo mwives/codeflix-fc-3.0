@@ -9,6 +9,7 @@ describe('SaveCategoryUseCase Unit Tests', () => {
 
   beforeEach(() => {
     repository = new CategoryInMemoryRepository();
+    jest.spyOn(repository, 'hasOnlyOneActivateInRelated').mockImplementation();
     useCase = new SaveCategoryUseCase(repository);
   });
 
@@ -107,7 +108,7 @@ describe('SaveCategoryUseCase Unit Tests', () => {
         created_at: new Date(),
       });
 
-      await expect(() => useCase.execute(input)).rejects.toThrowError(
+      await expect(() => useCase.execute(input)).rejects.toThrow(
         'Entity Validation Error',
       );
     });
