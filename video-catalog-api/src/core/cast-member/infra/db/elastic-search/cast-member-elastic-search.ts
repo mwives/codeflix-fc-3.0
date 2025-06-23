@@ -10,10 +10,7 @@ import {
 } from '@core/cast-member/domain/cast-member.repository';
 import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
 import { ICriteria } from '@core/shared/domain/repository/criteria.interface';
-import {
-  SearchParams,
-  SortDirection,
-} from '@core/shared/domain/repository/search-params';
+import { SortDirection } from '@core/shared/domain/repository/search-params';
 import { LoadEntityError } from '@core/shared/domain/validators/validation.error';
 import { SoftDeleteElasticSearchCriteria } from '@core/shared/infra/db/elastic-search/soft-delete-elastic-search.criteria';
 import {
@@ -511,7 +508,7 @@ export class CastMemberElasticSearchRepository
 
   async searchByCriteria(
     criterias: ICriteria[],
-    searchParams: SearchParams,
+    searchParams: CastMemberSearchParams,
   ): Promise<CastMemberSearchResult> {
     const offset = (searchParams.page - 1) * searchParams.per_page;
     const limit = searchParams.per_page;
