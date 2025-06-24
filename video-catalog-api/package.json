@@ -22,12 +22,14 @@
   "dependencies": {
     "@elastic/elasticsearch": "7.17",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/elasticsearch": "^11.0.0",
     "@nestjs/platform-express": "^11.0.1",
     "chance": "^1.1.12",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "joi": "^17.13.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "uuid": "^11.0.5"
