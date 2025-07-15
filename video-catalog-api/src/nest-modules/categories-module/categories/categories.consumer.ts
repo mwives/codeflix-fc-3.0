@@ -8,8 +8,9 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { EventPattern, Payload } from '@nestjs/microservices';
+import { Payload } from '@nestjs/microservices';
 import { CDCPayloadDto } from 'src/nest-modules/kafka-module/cdc.dto';
+import { KConnectEventPattern } from 'src/nest-modules/kafka-module/kconnect-event-pattern.decorator';
 import { TombstoneEventInterceptor } from 'src/nest-modules/kafka-module/tombstone-event.interceptor';
 
 @Controller()
@@ -27,7 +28,7 @@ export class CategoriesConsumer {
   private deleteUseCase: DeleteCategoryUseCase;
 
   @UseInterceptors(TombstoneEventInterceptor)
-  @EventPattern('mysql.micro_videos.categories')
+  @KConnectEventPattern('categories')
   async handle(
     @Payload(new ValidationPipe()) message: CDCPayloadDto,
   ): Promise<void> {
