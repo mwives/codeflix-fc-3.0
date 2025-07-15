@@ -58,11 +58,11 @@ export class CategoriesConsumer {
   private async handleCreateOrUpdate(message: CDCPayloadDto): Promise<void> {
     try {
       const inputData = {
-        category_id: message.after.category_id,
-        name: message.after.name,
-        description: message.after.description,
-        is_active: message.after.is_active,
-        created_at: message.after.created_at,
+        category_id: message.after?.category_id,
+        name: message.after?.name,
+        description: message.after?.description,
+        is_active: message.after?.is_active,
+        created_at: message.after?.created_at,
       };
 
       const validatedInput = await this.validationPipe.transform(inputData, {
@@ -72,11 +72,11 @@ export class CategoriesConsumer {
 
       await this.saveUseCase.execute(validatedInput);
       this.logger.log(
-        `[INFO] ${CategoriesConsumer.name} - Successfully processed ${message.op} operation for category: ${message.after.id}`,
+        `[INFO] ${CategoriesConsumer.name} - Successfully processed ${message.op} operation for category: ${message.after?.id}`,
       );
     } catch (error) {
       this.logger.error(
-        `[ERROR] ${CategoriesConsumer.name} - Failed to process ${message.op} operation for category: ${message.after.id}`,
+        `[ERROR] ${CategoriesConsumer.name} - Failed to process ${message.op} operation for category: ${message.after?.id}`,
         error,
       );
       throw error;
@@ -85,13 +85,13 @@ export class CategoriesConsumer {
 
   private async handleDelete(message: CDCPayloadDto): Promise<void> {
     try {
-      await this.deleteUseCase.execute({ id: message.before.id });
+      await this.deleteUseCase.execute({ id: message.before?.category_id });
       this.logger.log(
-        `[INFO] ${CategoriesConsumer.name} - Successfully deleted category: ${message.before.id}`,
+        `[INFO] ${CategoriesConsumer.name} - Successfully deleted category: ${message.before?.category_id}`,
       );
     } catch (error) {
       this.logger.error(
-        `[ERROR] ${CategoriesConsumer.name} - Failed to process delete operation for category: ${message.before.id}`,
+        `[ERROR] ${CategoriesConsumer.name} - Failed to process delete operation for category: ${message.before?.category_id}`,
         error,
       );
       throw error;
