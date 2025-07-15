@@ -1,13 +1,17 @@
 FROM node:22-slim
 
-RUN npm install -g @nestjs/cli@11.0.2
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+RUN pnpm install -g @nestjs/cli@11.0.2
 
 RUN apt update && \
   apt install -y curl && \
   curl -fsSL https://get.docker.com -o get-docker.sh && \
   sh ./get-docker.sh
 
-ENV DOCKER_GROUP_ID 999
+ENV DOCKER_GROUP_ID=999
 
 RUN groupadd -g ${DOCKER_GROUP_ID} docker-host-group; exit 0
 RUN usermod -aG ${DOCKER_GROUP_ID} node

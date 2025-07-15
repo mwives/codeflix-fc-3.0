@@ -1,5 +1,6 @@
 #!/bin/bash
 
-npm install
+pnpm install
 
-tail -f /dev/null
+# tail -f /dev/null
+pnpm start:dev

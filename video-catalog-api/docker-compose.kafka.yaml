@@ -11,6 +11,8 @@ services:
 
   kafka:
     image: confluentinc/cp-server:7.5.2
+    command: bash -c "sleep 30 && /etc/confluent/docker/run"
+    init: true
     hostname: kafka
     depends_on:
       - zookeeper
@@ -37,12 +39,18 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    healthcheck:
+      test: kafka-topics --bootstrap-server kafka:9092 --list
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.5.2
     hostname: schema-registry
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     ports:
       - "8083:8081"
     environment:
@@ -51,11 +59,13 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   connect:
-    image: cnfldemos/cp-server-connect-datagen:0.6.2-7.5.0
+    image: confluentinc/cp-kafka-connect:7.5.2
     hostname: connect
     depends_on:
-      - kafka
-      - schema-registry
+      kafka:
+        condition: service_healthy
+      schema-registry:
+        condition: service_started
     ports:
       - "8084:8083"
     environment:
@@ -72,8 +82,8 @@ services:
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      # CLASSPATH required due to CC-2422
-      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-7.5.2.jar
+      # CLASSPATH for monitoring interceptors
+      CLASSPATH: /usr/share/java/monitoring-interceptors/*
       CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
       CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
@@ -121,6 +131,3 @@ services:
     depends_on:
       connect:
         condition: service_healthy
-
-
-
