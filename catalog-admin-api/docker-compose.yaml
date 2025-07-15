@@ -10,6 +10,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       filebeat_collector: true
+    depends_on:
+      - db
+      - rabbitmq
 
   db:
     image: mysql:8.0.30-debian
@@ -23,6 +26,11 @@ services:
       - 3306:3306
     volumes:
       - ./.docker/dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     build: ./.docker/rabbitmq
@@ -32,3 +40,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
