@@ -1,8 +1,5 @@
-@host = localhost:9200
-
-
 ### Create a MySQL connector in Kafka Connect
-POST http://{{host}}/connectors
+POST http://localhost:8084/connectors
 Content-Type: application/json
 Accept: application/json
 
@@ -28,4 +25,4 @@ Accept: application/json
 }
 
 ### check the schema for a specific ID
-GET http://{{host}}/schemas/ids/3
+GET http://localhost:9200/schemas/ids/3
