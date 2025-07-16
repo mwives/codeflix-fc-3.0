@@ -1,10 +1,11 @@
 import { Global, Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Global()
 @Module({
   imports: [
+    ConfigModule,
     ElasticsearchModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         node: configService.get<string>('elastic_search.host'),
