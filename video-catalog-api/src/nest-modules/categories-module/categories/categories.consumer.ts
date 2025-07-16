@@ -72,11 +72,11 @@ export class CategoriesConsumer {
 
       await this.saveUseCase.execute(validatedInput);
       this.logger.log(
-        `[INFO] ${CategoriesConsumer.name} - Successfully processed ${message.op} operation for category: ${message.after?.id}`,
+        `[INFO] ${CategoriesConsumer.name} - Successfully processed ${message.op} operation for category: ${message.after?.category_id}`,
       );
     } catch (error) {
       this.logger.error(
-        `[ERROR] ${CategoriesConsumer.name} - Failed to process ${message.op} operation for category: ${message.after?.id}`,
+        `[ERROR] ${CategoriesConsumer.name} - Failed to process ${message.op} operation for category: ${message.after?.category_id}`,
         error,
       );
       throw error;
