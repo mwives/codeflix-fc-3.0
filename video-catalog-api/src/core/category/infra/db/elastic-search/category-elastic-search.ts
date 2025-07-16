@@ -116,26 +116,33 @@ export class CategoryElasticSearchRepository implements ICategoryRepository {
 
     query = this.applyScopes(query);
 
-    const result = await this.esClient.search({
-      index: this.index,
-      body: {
-        query,
-      },
-    });
+    try {
+      const result = await this.esClient.search({
+        index: this.index,
+        body: {
+          query,
+        },
+      });
 
-    const docs = result.body.hits.hits as GetGetResult<CategoryDocument>[];
+      const docs = result.body.hits.hits as GetGetResult<CategoryDocument>[];
 
-    if (docs.length === 0) {
-      return null;
+      if (docs.length === 0) {
+        return null;
+      }
+
+      const document = docs[0]._source;
+
+      if (!document) {
+        return null;
+      }
+
+      return CategoryElasticSearchMapper.toEntity(id.id, document);
+    } catch (error: any) {
+      if (error.meta?.body?.error?.type === 'index_not_found_exception') {
+        return null;
+      }
+      throw error;
     }
-
-    const document = docs[0]._source;
-
-    if (!document) {
-      return null;
-    }
-
-    return CategoryElasticSearchMapper.toEntity(id.id, document);
   }
 
   async findOneBy(filter: {
