@@ -129,11 +129,11 @@ export function setupKafka(
   beforeAll(async () => {
     _kafkaContainer = await tryStartContainer(async () => {
       return await new CustomKafkaContainer('confluentinc/cp-kafka:7.5.2')
-        .withReuse()
         .withExposedPorts({
           container: 9092,
           host: 9093,
         })
+        .withStartupTimeout(120000)
         .start();
     });
     if (options.schemaRegistry) {
@@ -141,7 +141,6 @@ export function setupKafka(
         return await new GenericContainer(
           'confluentinc/cp-schema-registry:7.5.2',
         )
-          .withReuse()
           .withEnvironment({
             SCHEMA_REGISTRY_HOST_NAME: 'schema-registry',
             SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: `${_kafkaContainer.getHost()}:${_kafkaContainer.getMappedPort(9093)}`,
@@ -151,6 +150,7 @@ export function setupKafka(
             container: 8081,
             host: 8082,
           })
+          .withStartupTimeout(120000)
           .start();
       });
     }
@@ -164,7 +164,6 @@ export function setupKafka(
         return await new GenericContainer(
           'cnfldemos/cp-server-connect-datagen:0.6.2-7.5.0',
         )
-          .withReuse()
           .withExposedPorts({
             container: 8083,
             host: 8084,

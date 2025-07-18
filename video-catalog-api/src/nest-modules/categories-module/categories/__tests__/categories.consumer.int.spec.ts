@@ -6,10 +6,9 @@ import {
   setupKafka,
 } from '@core/shared/infra/testing/global-helpers';
 import { BadRequestException, INestMicroservice } from '@nestjs/common';
-import { ServerKafka, Transport } from '@nestjs/microservices';
+import { ServerKafka } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
 import crypto from 'crypto';
-import { logLevel } from 'kafkajs';
 import { ConfigModule } from 'src/nest-modules/config-module/config-module';
 import { overrideConfiguration } from 'src/nest-modules/config-module/configuration';
 import { ElasticSearchModule } from 'src/nest-modules/elastic-search-module/elastic-search-module';
@@ -17,6 +16,7 @@ import {
   CDCOperation,
   CDCPayloadDto,
 } from 'src/nest-modules/kafka-module/cdc.dto';
+import { ConfluentKafkaServer } from 'src/nest-modules/kafka-module/confluent/confluent-kafka-server';
 import { KafkaModule } from 'src/nest-modules/kafka-module/kafka.module';
 import { KConnectEventPatternRegister } from 'src/nest-modules/kafka-module/kconnect-event-pattern.register';
 import { TestDynamicExceptionFilter } from 'src/nest-modules/shared-module/testing/test-dynamic-exception.filter';
@@ -67,27 +67,18 @@ describe('CategoriesConsumer Integration Tests', () => {
       .registerKConnectTopicDecorator();
 
     _microserviceInst = _nestModule.createNestMicroservice({
-      transport: Transport.KAFKA,
-      options: {
-        client: {
-          clientId: 'test_client' + crypto.randomInt(0, 1000000),
-          brokers: [kafkaHelper.kafkaContainerHost],
-          connectionTimeout: 1000,
-          logLevel: logLevel.NOTHING,
+      strategy: new ConfluentKafkaServer({
+        server: {
+          'client.id': 'test_client' + crypto.randomInt(0, 1000000),
+          'bootstrap.servers': kafkaHelper.kafkaContainerHost,
+          log_level: 0,
         },
         consumer: {
-          allowAutoTopicCreation: false,
           groupId: 'test_group' + crypto.randomInt(0, 1000000),
-          retry: {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            restartOnFailure: (e: any) => Promise.resolve(false),
-          },
-          maxWaitTimeInMs: 0,
-        },
-        subscribe: {
+          allowAutoTopicCreation: false,
           fromBeginning: true,
         },
-      },
+      }),
     });
 
     _kafkaServer = _microserviceInst['serverInstance'];
@@ -98,14 +89,14 @@ describe('CategoriesConsumer Integration Tests', () => {
     await kafkaHelper.kafkaContainer.deleteTopic(_categoriesTopic);
   });
 
-  it('should throw a validation exception when event is invalid', async () => {
+  it('should throw an validation exception when event is invalid', async () => {
     expect.assertions(2);
     const exceptionFilterClass =
       TestDynamicExceptionFilter.createDynamicExceptionFilter(
         async (exception, _host) => {
           const error = exception as BadRequestException;
           expect(error).toBeInstanceOf(BadRequestException);
-          //@ts-expect-error - error.getResponse is a object
+          // @ts-expect-error - error.getResponse is a object
           const message = error.getResponse().message;
           expect(message).toEqual([
             'op should not be empty',
@@ -127,10 +118,9 @@ describe('CategoriesConsumer Integration Tests', () => {
           value: JSON.stringify(message),
         },
       ],
-      timeout: 1000,
     });
 
-    await sleep(1000);
+    await sleep(2000);
   });
 
   test('should create a category', async () => {
@@ -158,7 +148,7 @@ describe('CategoriesConsumer Integration Tests', () => {
       ],
     });
 
-    await sleep(1000);
+    await sleep(2000);
 
     const repository = _microserviceInst.get<ICategoryRepository>(
       CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
@@ -201,7 +191,7 @@ describe('CategoriesConsumer Integration Tests', () => {
       ],
     });
 
-    await sleep(1000);
+    await sleep(2000);
 
     const updatedCategory = await repository.findById(category.category_id);
     expect(updatedCategory).toBeDefined();
@@ -238,7 +228,7 @@ describe('CategoriesConsumer Integration Tests', () => {
       ],
     });
 
-    await sleep(1000);
+    await sleep(2000);
 
     await expect(
       repository.ignoreSoftDeleted().findById(category.category_id),
