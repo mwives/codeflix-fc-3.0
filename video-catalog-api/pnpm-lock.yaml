@@ -59,6 +59,9 @@ importers:
       kafkajs:
         specifier: ^2.2.4
         version: 2.2.4
+      kafkajs-async-retry:
+        specifier: ^1.0.0
+        version: 1.0.0(kafkajs@2.2.4)
       mysql2:
         specifier: ^3.14.2
         version: 3.14.2
@@ -3514,6 +3517,11 @@ packages:
 
   jws@4.0.0:
     resolution: {integrity: sha512-KDncfTmOZoOMTFG4mBlG0qUIOlc03fmzH+ru6RgYVZhPkyiy/92Owlt/8UEN+a4TXR1FQetfIpJE8ApdvdVxTg==}
+
+  kafkajs-async-retry@1.0.0:
+    resolution: {integrity: sha512-Kf3L9pJ9PDg8Cia1OCGKrwHxOiTNpgQCycF6o4lqpe2KDkQZsSX0DCfHi/Xnps54SRHbuCqlzWVpgxbEIWOBXg==}
+    peerDependencies:
+      kafkajs: ^2.1.0
 
   kafkajs@2.2.4:
     resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
@@ -9283,6 +9291,10 @@ snapshots:
     dependencies:
       jwa: 2.0.1
       safe-buffer: 5.2.1
+
+  kafkajs-async-retry@1.0.0(kafkajs@2.2.4):
+    dependencies:
+      kafkajs: 2.2.4
 
   kafkajs@2.2.4: {}
 
